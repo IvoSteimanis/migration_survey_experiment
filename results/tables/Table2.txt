@@ -1,0 +1,36 @@
+	(1)	(2)
+VARIABLES	acceptance	acceptance
+		
+t_2	-0.44	0.09
+	(0.30)	(0.17)
+t_3	-0.69**	-0.49***
+	(0.33)	(0.17)
+t_4	-0.47	-0.88***
+	(0.40)	(0.23)
+female	-0.22	
+	(0.29)	
+t2_female	0.74**	
+	(0.35)	
+t3_female	0.16	
+	(0.37)	
+t4_female	-0.86*	
+	(0.46)	
+right_voter		0.12
+		(0.39)
+t2_right		-0.70
+		(0.52)
+t3_right		-0.98*
+		(0.52)
+t4_right		-1.55***
+		(0.59)
+Constant	7.00***	6.87***
+	(0.44)	(0.41)
+		
+Observations	686	686
+R-squared	0.31	0.30
+Adjusted R-squared	0.29	0.27
+F-Test: Interaction ENV GLOBAL	0.05	0.54
+F-Test: Interaction ENBV LOCAL	0.00	0.00
+F-Test: Interaction ECON	0.00	0.00
+Robust standard errors in parentheses		
+*** p<0.01, ** p<0.05, * p<0.1		

@@ -1,0 +1,2304 @@
+------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/logs/2022.03.21-12.38.14.log.
+> txt
+  log type:  text
+ opened on:  21 Mar 2022, 12:38:14
+
+. 
+. di "Begin date and time: $S_DATE $S_TIME"
+Begin date and time: 21 Mar 2022 12:38:14
+
+. di "Stata version: `c(stata_version)'"
+Stata version: 16.1
+
+. di "Updated as of: `c(born_date)'"
+Updated as of: 19 Nov 2020
+
+. di "Variant:       `=cond( c(MP),"MP",cond(c(SE),"SE",c(flavor)) )'"
+Variant:       MP
+
+. di "Processors:    `c(processors)'"
+Processors:    2
+
+. di "OS:            `c(os)' `c(osdtl)'"
+OS:            Windows 64-bit
+
+. di "Machine type:  `c(machine_type)'"
+Machine type:  PC (64-bit x86-64)
+
+. 
+. *   Analyses were run on Windows using Stata version 16
+. version 16              // Set Version number for backward compatibility
+
+. 
+. * All required Stata packages are available in the /libraries/stata folder
+. tokenize `"$S_ADO"', parse(";")
+
+. while `"`1'"' != "" {
+  2.   if `"`1'"'!="BASE" cap adopath - `"`1'"'
+  3.   macro shift
+  4. }
+
+. adopath ++ "$working_ANALYSIS/scripts/libraries/stata"
+  [1]              "C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata"
+  [2]  (BASE)      "C:\Program Files\Stata16\ado\base/"
+
+. mata: mata mlib index
+.mlib libraries to be searched are now
+    lmatabase;lmataado;lmataerm;lmatafc;lmatagsem;lmatalasso;lmatamcmc;lmatameta;lmatami;lmatamixlog;lmatanumlib;lmataopt;lmatapath;lmatapostest;lmata
+> pss;lmatasem;lmatasp;lmatasvy;lmatatab;lcolrspace
+
+. sysdir set PERSONAL "$working_ANALYSIS/scripts/libraries/stata"
+
+. 
+. * Create directories for output files
+. cap mkdir "$working_ANALYSIS/processed"
+
+. cap mkdir "$working_ANALYSIS/results"
+
+. cap mkdir "$working_ANALYSIS/results/intermediate"
+
+. cap mkdir "$working_ANALYSIS/results/tables"
+
+. cap mkdir "$working_ANALYSIS/results/figures"
+
+. * -------------------------------------------------
+. 
+. * Set general graph style
+. set scheme swift_red //select one scheme as reference scheme to work with
+
+. grstyle init 
+
+. {
+. *Background color
+. grstyle set color white: background plotregion graphregion legend box textbox //
+. 
+. *Main colors (note: swift_red only defines 8 colors. Multiplying the color, that is "xx yy zz*0.5" reduces/increases intensity and "xx yy zz%50" red
+> uces transparency)
+. grstyle set color       "100 143 255" "120 94 240" "220 38 127" "254 97 0" "255 176 0" /// 5 main colors
+>                                         "100 143 255*0.4" "120 94 240*0.4" "220 38 127*0.4" "254 97 0*0.4" "255 176 0*0.4" ///
+>                                         "100 143 255*1.7" "120 94 240*1.7" "220 38 127*1.7" "254 97 0*1.7" "255 176 0*1.7" ///
+>                                         : p# p#line p#lineplot p#bar p#area p#arealine p#pie histogram 
+. 
+. *Font size
+. grstyle set size 10pt: heading //titles
+. grstyle set size 8pt: subheading axis_title //axis titles
+. grstyle set size 8pt: p#label p#boxlabel body small_body text_option axis_label tick_label minortick_label key_label //all other text
+. }
+
+. 
+end of do-file
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. *--------------------------------------------------------------------
+. * SCRIPT: 02_analysis.do
+. * PURPOSE: replicates all tables and figures and saves the results
+. *--------------------------------------------------------------------
+. *--------------------------------------------------
+. * AUTHOR GUIDELINES - Regional Environmental Change:
+. * The figures should be 84 mm, 129 mm, or 174 mm wide and not higher than 234 mm.
+. 
+. /* (1) MAIN MANUSCRIPT
+>         - Figure 1: Acceptance by treatment and polarization
+>         - TABLE 2: Overall determinants of acceptance levels with POL as reference group
+>         - TABLE 3: HETEROGENEOUS TREATMENT EFFECTS
+>         (2) SUPPLEMENTARY MATERIALS
+> */
+. *--------------------------------------------------
+. use "$working_ANALYSIS/processed/migration_clean.dta", replace
+
+. 
+. 
+. 
+. *drop incompletely filled out responses
+. *Figure S1: Response rate,  attrition by treatment
+. catplot incomplete, recast(bar) b1title("") over(treatment) vertical asyvars yla(0(50)300) legend(pos(6) ring(1) row(1)) ytitle("Frequency") yla(,no
+> grid) blabel(bar, pos(outside) size(8pt) format(%4.0f)) xsize(`=8.4/2.54') ysize(`=6/2.54')
+
+. gr save "$working_ANALYSIS/results/intermediate/FigureS1.gph", replace
+(file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/intermediate/FigureS1.gph saved)
+
+. gr export "$working_ANALYSIS/results/figures/FigureS1.tif", replace width(3150)
+(file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/figures/FigureS1.tif written in TIFF
+>  format)
+
+. kwallis incomplete, by(treatment)
+
+Kruskal-Wallis equality-of-populations rank test
+
+  +------------------------------+
+  |  treatment | Obs |  Rank Sum |
+  |------------+-----+-----------|
+  |   CONFLICT | 202 | 122653.50 |
+  | ENV GLOBAL | 423 | 253629.00 |
+  |  ENV LOCAL | 375 | 220981.50 |
+  |       ECON | 197 | 119739.00 |
+  +------------------------------+
+
+chi-squared =     0.539 with 3 d.f.
+probability =     0.9102
+
+chi-squared with ties =     0.734 with 3 d.f.
+probability =     0.8651
+
+. *drop all observations where the participants did not complete the survey
+. drop if incomplete==1
+(511 observations deleted)
+
+. 
+. 
+. 
+end of do-file
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. *--------------------------------------------------------------------
+. * SCRIPT: 02_analysis.do
+. * PURPOSE: replicates all tables and figures and saves the results
+. *--------------------------------------------------------------------
+. *--------------------------------------------------
+. * AUTHOR GUIDELINES - Regional Environmental Change:
+. * The figures should be 84 mm, 129 mm, or 174 mm wide and not higher than 234 mm.
+. 
+. /* (1) MAIN MANUSCRIPT
+>         - Figure 1: Acceptance by treatment and polarization
+>         - TABLE 2: Overall determinants of acceptance levels with POL as reference group
+>         - TABLE 3: HETEROGENEOUS TREATMENT EFFECTS
+>         (2) SUPPLEMENTARY MATERIALS
+> */
+. *--------------------------------------------------
+. use "$working_ANALYSIS/processed/migration_clean.dta", replace
+
+. 
+. 
+. 
+. *drop incompletely filled out responses
+. *Figure S1: Response rate,  attrition by treatment
+. catplot incomplete, recast(bar) b1title("") over(treatment) vertical asyvars yla(0(50)300) legend(pos(6) ring(1) row(1)) ytitle("Frequency") yla(,no
+> grid) blabel(bar, pos(outside) format(%4.0f)) xsize(`=8.4/2.54') ysize(`=6/2.54')
+
+. gr save "$working_ANALYSIS/results/intermediate/FigureS1.gph", replace
+(file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/intermediate/FigureS1.gph saved)
+
+. gr export "$working_ANALYSIS/results/figures/FigureS1.tif", replace width(4000)
+(file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/figures/FigureS1.tif written in TIFF
+>  format)
+
+. kwallis incomplete, by(treatment)
+
+Kruskal-Wallis equality-of-populations rank test
+
+  +------------------------------+
+  |  treatment | Obs |  Rank Sum |
+  |------------+-----+-----------|
+  |   CONFLICT | 202 | 122653.50 |
+  | ENV GLOBAL | 423 | 253629.00 |
+  |  ENV LOCAL | 375 | 220981.50 |
+  |       ECON | 197 | 119739.00 |
+  +------------------------------+
+
+chi-squared =     0.539 with 3 d.f.
+probability =     0.9102
+
+chi-squared with ties =     0.734 with 3 d.f.
+probability =     0.8651
+
+. *drop all observations where the participants did not complete the survey
+. drop if incomplete==1
+(511 observations deleted)
+
+. 
+end of do-file
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. cibar acceptance, over1(treatment)  bargap(20) barlabel(on) blfmt(%5.1f) blpos(11) blgap(0.03) graphopts(xsize(2.5) ysize(2)  legend(ring (1) pos(6)
+>  rows(2)) yla(1(1)8, nogrid) xla(, nogrid)  title("{bf:a} Main treatment effects")  ytitle("Acceptance Level", )) ciopts(lcolor(black) lpattern(dash
+> )) 
+
+. gr save "$working_ANALYSIS/results/intermediate/Figure1a.gph", replace
+(note: file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/intermediate/Figure1a.gph not 
+> found)
+(file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/intermediate/Figure1a.gph saved)
+
+. 
+. * H0: NO signficant differences across treatments
+. reg acceptance i.treatment, vce(robust)
+
+Linear regression                               Number of obs     =        686
+                                                F(3, 682)         =      10.23
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.0434
+                                                Root MSE          =     1.7782
+
+------------------------------------------------------------------------------
+             |               Robust
+  acceptance |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+   treatment |
+ ENV GLOBAL  |   .0068017   .1903351     0.04   0.972    -.3669113    .3805148
+  ENV LOCAL  |  -.6623954     .19385    -3.42   0.001     -1.04301   -.2817809
+       ECON  |  -.8857603   .2321741    -3.82   0.000    -1.341622   -.4298983
+             |
+       _cons |   5.522124   .1511946    36.52   0.000     5.225261    5.818987
+------------------------------------------------------------------------------
+
+. * reject, env force and POL significantly higher
+. 
+. *H1: legal status matters?
+. ttest acceptance if treatment==1 | treatment==3, by(treatment)
+
+Two-sample t test with equal variances
+------------------------------------------------------------------------------
+   Group |     Obs        Mean    Std. Err.   Std. Dev.   [95% Conf. Interval]
+---------+--------------------------------------------------------------------
+CONFLICT |     113    5.522124    .1514246    1.609666    5.222095    5.822152
+ENV LOCA |     221    4.859729    .1212383    1.802336    4.620791    5.098666
+---------+--------------------------------------------------------------------
+combined |     334    5.083832    .0965897    1.765241     4.89383    5.273835
+---------+--------------------------------------------------------------------
+    diff |            .6623954    .2011957                .2666163    1.058174
+------------------------------------------------------------------------------
+    diff = mean(CONFLICT) - mean(ENV LOCA)                        t =   3.2923
+Ho: diff = 0                                     degrees of freedom =      332
+
+    Ha: diff < 0                 Ha: diff != 0                 Ha: diff > 0
+ Pr(T < t) = 0.9994         Pr(|T| > |t|) = 0.0011          Pr(T > t) = 0.0006
+
+. ranksum acceptance if treatment==1 | treatment==3, by(treatment)
+
+Two-sample Wilcoxon rank-sum (Mann-Whitney) test
+
+   treatment |      obs    rank sum    expected
+-------------+---------------------------------
+    CONFLICT |      113       21525     18927.5
+   ENV LOCAL |      221       34420     37017.5
+-------------+---------------------------------
+    combined |      334       55945       55945
+
+unadjusted variance   697162.92
+adjustment for ties   -29007.86
+                     ----------
+adjusted variance     668155.06
+
+Ho: accept~e(treatm~t==CONFLICT) = accept~e(treatm~t==ENV LOCAL)
+             z =   3.178
+    Prob > |z| =   0.0015
+
+Note: Exact p-value is not computed by default for sample sizes > 200.
+      Use option exact to compute it.
+
+. *no sign differnece between ENV FORCED and POL p=0.8), legal status seems not to be the main driver of acceptance
+. 
+. *H2: responsibility matters
+. ttest acceptance if treatment==3 | treatment==4, by(treatment)
+
+Two-sample t test with equal variances
+------------------------------------------------------------------------------
+   Group |     Obs        Mean    Std. Err.   Std. Dev.   [95% Conf. Interval]
+---------+--------------------------------------------------------------------
+ENV LOCA |     221    4.859729    .1212383    1.802336    4.620791    5.098666
+    ECON |     110    4.636364    .1764856    1.850997    4.286575    4.986152
+---------+--------------------------------------------------------------------
+combined |     331    4.785498    .0999758    1.818899    4.588828    4.982169
+---------+--------------------------------------------------------------------
+    diff |            .2233649    .2122068               -.1940884    .6408181
+------------------------------------------------------------------------------
+    diff = mean(ENV LOCA) - mean(ECON)                            t =   1.0526
+Ho: diff = 0                                     degrees of freedom =      329
+
+    Ha: diff < 0                 Ha: diff != 0                 Ha: diff > 0
+ Pr(T < t) = 0.8533         Pr(|T| > |t|) = 0.2933          Pr(T > t) = 0.1467
+
+. ranksum acceptance if treatment==3 | treatment==4, by(treatment)
+
+Two-sample Wilcoxon rank-sum (Mann-Whitney) test
+
+   treatment |      obs    rank sum    expected
+-------------+---------------------------------
+   ENV LOCAL |      221     38311.5       36686
+        ECON |      110     16634.5       18260
+-------------+---------------------------------
+    combined |      331       54946       54946
+
+unadjusted variance   672576.67
+adjustment for ties   -22654.17
+                     ----------
+adjusted variance     649922.50
+
+Ho: accept~e(treatm~t==ENV LOCAL) = accept~e(treatm~t==ECON)
+             z =   2.016
+    Prob > |z| =   0.0438
+
+Note: Exact p-value is not computed by default for sample sizes > 200.
+      Use option exact to compute it.
+
+. 
+. *H3: Voluntariness matters?
+. ttest acceptance if treatment==2 | treatment==4, by(treatment)
+
+Two-sample t test with equal variances
+------------------------------------------------------------------------------
+   Group |     Obs        Mean    Std. Err.   Std. Dev.   [95% Conf. Interval]
+---------+--------------------------------------------------------------------
+ENV GLOB |     242    5.528926    .1155199    1.797067    5.301368    5.756483
+    ECON |     110    4.636364    .1764856    1.850997    4.286575    4.986152
+---------+--------------------------------------------------------------------
+combined |     352        5.25    .0990436    1.858223    5.055206    5.444794
+---------+--------------------------------------------------------------------
+    diff |             .892562    .2085993                .4822962    1.302828
+------------------------------------------------------------------------------
+    diff = mean(ENV GLOB) - mean(ECON)                            t =   4.2788
+Ho: diff = 0                                     degrees of freedom =      350
+
+    Ha: diff < 0                 Ha: diff != 0                 Ha: diff > 0
+ Pr(T < t) = 1.0000         Pr(|T| > |t|) = 0.0000          Pr(T > t) = 0.0000
+
+. ranksum acceptance if treatment==2 | treatment==4, by(treatment)
+
+Two-sample Wilcoxon rank-sum (Mann-Whitney) test
+
+   treatment |      obs    rank sum    expected
+-------------+---------------------------------
+  ENV GLOBAL |      242       46915       42713
+        ECON |      110       15213       19415
+-------------+---------------------------------
+    combined |      352       62128       62128
+
+unadjusted variance   783071.67
+adjustment for ties   -23892.44
+                     ----------
+adjusted variance     759179.23
+
+Ho: accept~e(treatm~t==ENV GLOBAL) = accept~e(treatm~t==ECON)
+             z =   4.823
+    Prob > |z| =   0.0000
+
+Note: Exact p-value is not computed by default for sample sizes > 200.
+      Use option exact to compute it.
+
+. 
+. 
+. *Panel B: Distribution by treatment
+. mylabels 0(20)100, myscale(@) local(pctlabel) suffix("%") 
+0 "0%" 20 "20%" 40 "40%" 60 "60%" 80 "80%" 100 "100%"
+
+. catplot imm_opinion, over(treatment) asyvars stack title("{bf:b} Polarization") yla(`pctlabel', nogrid) percent(treatment) legend(pos(6) ring(1) row
+> s(2))  blabel(bar, format(%9.0f) pos(center)) ytitle("") l1title("")  b1title("")  xsize(`=8.4/2.54') ysize(`=6/2.54')
+
+. gr save "$working_ANALYSIS/results/intermediate/Figure1b.gph", replace
+(note: file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/intermediate/Figure1b.gph not 
+> found)
+(file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/intermediate/Figure1b.gph saved)
+
+. 
+. gr combine "$working_ANALYSIS/results/intermediate/Figure1a.gph" "$working_ANALYSIS/results/intermediate/Figure1b.gph", rows(1)  xsize(3.465) ysize(
+> 2) iscale(1.1)
+
+. 
+end of do-file
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. grstyle set margin tiny
+
+. 
+end of do-file
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. *------------------------------
+. *define globals
+. global treatments t_2 t_3 t_4
+
+. global socio_economic female single age religion diff_friends index_surr
+
+. global polit left_voter right_voter no_voter
+
+. global impacts steal_jobs increase_crime tax_burden index_attributes asylum_abroad 
+
+.                 
+. 
+. *Fig 1. Average acceptance and polarization across treatments
+. bysort treatment: su acceptance, detail
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = CONFLICT
+
+                      Acceptance Level
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            2              1
+10%            4              2       Obs                 113
+25%            5              2       Sum of Wgt.         113
+
+50%            6                      Mean           5.522124
+                        Largest       Std. Dev.      1.609666
+75%            7              8
+90%            8              8       Variance       2.591024
+95%            8              8       Skewness      -.3948799
+99%            8              8       Kurtosis       3.066715
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ENV GLOBAL
+
+                      Acceptance Level
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            2              1
+10%            4              1       Obs                 242
+25%            5              1       Sum of Wgt.         242
+
+50%            5                      Mean           5.528926
+                        Largest       Std. Dev.      1.797067
+75%            7              8
+90%            8              8       Variance        3.22945
+95%            8              8       Skewness      -.5350447
+99%            8              8       Kurtosis        3.13398
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ENV LOCAL
+
+                      Acceptance Level
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            2              1       Obs                 221
+25%            4              1       Sum of Wgt.         221
+
+50%            5                      Mean           4.859729
+                        Largest       Std. Dev.      1.802336
+75%            6              8
+90%            7              8       Variance       3.248416
+95%            8              8       Skewness      -.3685667
+99%            8              8       Kurtosis       2.973968
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ECON
+
+                      Acceptance Level
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            2              1
+10%          2.5              2       Obs                 110
+25%            3              2       Sum of Wgt.         110
+
+50%            4                      Mean           4.636364
+                        Largest       Std. Dev.      1.850997
+75%            6              8
+90%            8              8       Variance       3.426188
+95%            8              8       Skewness       .4457027
+99%            8              8       Kurtosis       2.381811
+
+
+. *Panel A: ATE
+. cibar acceptance, over1(treatment)  bargap(20) barlabel(on) blfmt(%5.1f) blpos(10) blgap(0.03) graphopts(xsize(2.5) ysize(2)  legend(ring (1) pos(6)
+>  rows(2)) yla(1(1)8, nogrid) xla(, nogrid)  title("{bf:a} Main treatment effects")  ytitle("Acceptance Level", )) ciopts(lcolor(black) lpattern(dash
+> )) 
+
+. gr save "$working_ANALYSIS/results/intermediate/Figure1a.gph", replace
+(file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/intermediate/Figure1a.gph saved)
+
+. 
+. * H0: NO signficant differences across treatments
+. reg acceptance i.treatment, vce(robust)
+
+Linear regression                               Number of obs     =        686
+                                                F(3, 682)         =      10.23
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.0434
+                                                Root MSE          =     1.7782
+
+------------------------------------------------------------------------------
+             |               Robust
+  acceptance |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+   treatment |
+ ENV GLOBAL  |   .0068017   .1903351     0.04   0.972    -.3669113    .3805148
+  ENV LOCAL  |  -.6623954     .19385    -3.42   0.001     -1.04301   -.2817809
+       ECON  |  -.8857603   .2321741    -3.82   0.000    -1.341622   -.4298983
+             |
+       _cons |   5.522124   .1511946    36.52   0.000     5.225261    5.818987
+------------------------------------------------------------------------------
+
+. * reject, env force and POL significantly higher
+. 
+. *H1: legal status matters?
+. ttest acceptance if treatment==1 | treatment==3, by(treatment)
+
+Two-sample t test with equal variances
+------------------------------------------------------------------------------
+   Group |     Obs        Mean    Std. Err.   Std. Dev.   [95% Conf. Interval]
+---------+--------------------------------------------------------------------
+CONFLICT |     113    5.522124    .1514246    1.609666    5.222095    5.822152
+ENV LOCA |     221    4.859729    .1212383    1.802336    4.620791    5.098666
+---------+--------------------------------------------------------------------
+combined |     334    5.083832    .0965897    1.765241     4.89383    5.273835
+---------+--------------------------------------------------------------------
+    diff |            .6623954    .2011957                .2666163    1.058174
+------------------------------------------------------------------------------
+    diff = mean(CONFLICT) - mean(ENV LOCA)                        t =   3.2923
+Ho: diff = 0                                     degrees of freedom =      332
+
+    Ha: diff < 0                 Ha: diff != 0                 Ha: diff > 0
+ Pr(T < t) = 0.9994         Pr(|T| > |t|) = 0.0011          Pr(T > t) = 0.0006
+
+. ranksum acceptance if treatment==1 | treatment==3, by(treatment)
+
+Two-sample Wilcoxon rank-sum (Mann-Whitney) test
+
+   treatment |      obs    rank sum    expected
+-------------+---------------------------------
+    CONFLICT |      113       21525     18927.5
+   ENV LOCAL |      221       34420     37017.5
+-------------+---------------------------------
+    combined |      334       55945       55945
+
+unadjusted variance   697162.92
+adjustment for ties   -29007.86
+                     ----------
+adjusted variance     668155.06
+
+Ho: accept~e(treatm~t==CONFLICT) = accept~e(treatm~t==ENV LOCAL)
+             z =   3.178
+    Prob > |z| =   0.0015
+
+Note: Exact p-value is not computed by default for sample sizes > 200.
+      Use option exact to compute it.
+
+. *no sign differnece between ENV FORCED and POL p=0.8), legal status seems not to be the main driver of acceptance
+. 
+. *H2: responsibility matters
+. ttest acceptance if treatment==3 | treatment==4, by(treatment)
+
+Two-sample t test with equal variances
+------------------------------------------------------------------------------
+   Group |     Obs        Mean    Std. Err.   Std. Dev.   [95% Conf. Interval]
+---------+--------------------------------------------------------------------
+ENV LOCA |     221    4.859729    .1212383    1.802336    4.620791    5.098666
+    ECON |     110    4.636364    .1764856    1.850997    4.286575    4.986152
+---------+--------------------------------------------------------------------
+combined |     331    4.785498    .0999758    1.818899    4.588828    4.982169
+---------+--------------------------------------------------------------------
+    diff |            .2233649    .2122068               -.1940884    .6408181
+------------------------------------------------------------------------------
+    diff = mean(ENV LOCA) - mean(ECON)                            t =   1.0526
+Ho: diff = 0                                     degrees of freedom =      329
+
+    Ha: diff < 0                 Ha: diff != 0                 Ha: diff > 0
+ Pr(T < t) = 0.8533         Pr(|T| > |t|) = 0.2933          Pr(T > t) = 0.1467
+
+. ranksum acceptance if treatment==3 | treatment==4, by(treatment)
+
+Two-sample Wilcoxon rank-sum (Mann-Whitney) test
+
+   treatment |      obs    rank sum    expected
+-------------+---------------------------------
+   ENV LOCAL |      221     38311.5       36686
+        ECON |      110     16634.5       18260
+-------------+---------------------------------
+    combined |      331       54946       54946
+
+unadjusted variance   672576.67
+adjustment for ties   -22654.17
+                     ----------
+adjusted variance     649922.50
+
+Ho: accept~e(treatm~t==ENV LOCAL) = accept~e(treatm~t==ECON)
+             z =   2.016
+    Prob > |z| =   0.0438
+
+Note: Exact p-value is not computed by default for sample sizes > 200.
+      Use option exact to compute it.
+
+. 
+. *H3: Voluntariness matters?
+. ttest acceptance if treatment==2 | treatment==4, by(treatment)
+
+Two-sample t test with equal variances
+------------------------------------------------------------------------------
+   Group |     Obs        Mean    Std. Err.   Std. Dev.   [95% Conf. Interval]
+---------+--------------------------------------------------------------------
+ENV GLOB |     242    5.528926    .1155199    1.797067    5.301368    5.756483
+    ECON |     110    4.636364    .1764856    1.850997    4.286575    4.986152
+---------+--------------------------------------------------------------------
+combined |     352        5.25    .0990436    1.858223    5.055206    5.444794
+---------+--------------------------------------------------------------------
+    diff |             .892562    .2085993                .4822962    1.302828
+------------------------------------------------------------------------------
+    diff = mean(ENV GLOB) - mean(ECON)                            t =   4.2788
+Ho: diff = 0                                     degrees of freedom =      350
+
+    Ha: diff < 0                 Ha: diff != 0                 Ha: diff > 0
+ Pr(T < t) = 1.0000         Pr(|T| > |t|) = 0.0000          Pr(T > t) = 0.0000
+
+. ranksum acceptance if treatment==2 | treatment==4, by(treatment)
+
+Two-sample Wilcoxon rank-sum (Mann-Whitney) test
+
+   treatment |      obs    rank sum    expected
+-------------+---------------------------------
+  ENV GLOBAL |      242       46915       42713
+        ECON |      110       15213       19415
+-------------+---------------------------------
+    combined |      352       62128       62128
+
+unadjusted variance   783071.67
+adjustment for ties   -23892.44
+                     ----------
+adjusted variance     759179.23
+
+Ho: accept~e(treatm~t==ENV GLOBAL) = accept~e(treatm~t==ECON)
+             z =   4.823
+    Prob > |z| =   0.0000
+
+Note: Exact p-value is not computed by default for sample sizes > 200.
+      Use option exact to compute it.
+
+. 
+. 
+. *Panel B: Distribution by treatment
+. mylabels 0(20)100, myscale(@) local(pctlabel) suffix("%") 
+0 "0%" 20 "20%" 40 "40%" 60 "60%" 80 "80%" 100 "100%"
+
+. catplot imm_opinion, over(treatment) asyvars stack title("{bf:b} Polarization") yla(`pctlabel', nogrid) percent(treatment) legend(pos(6) ring(1) row
+> s(2))  blabel(bar, format(%9.0f) pos(center)) ytitle("") l1title("")  b1title("")  xsize(`=8.4/2.54') ysize(`=6/2.54')
+
+. gr save "$working_ANALYSIS/results/intermediate/Figure1b.gph", replace
+(file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/intermediate/Figure1b.gph saved)
+
+. 
+. gr combine "$working_ANALYSIS/results/intermediate/Figure1a.gph" "$working_ANALYSIS/results/intermediate/Figure1b.gph", rows(1)  xsize(3.465) ysize(
+> 2) iscale(1.1)
+
+. gr save "$working_ANALYSIS/results/intermediate/Figure1.gph", replace
+(file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/intermediate/Figure1.gph saved)
+
+. gr export "$working_ANALYSIS/results/figures/Figure1.tif", replace width(4000)
+(file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/figures/Figure1.tif written in TIFF 
+> format)
+
+. 
+. 
+end of do-file
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. sum $demo
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+          id |        686       343.5    198.1754          1        686
+  randnumber |        686    3.488338    1.677418          1          6
+  acceptance |        686    5.169096    1.814131          1          8
+         wtp |        686    155.0423    695.5434          0      10000
+         wta |        686    5952.615    22407.58          0      99999
+-------------+---------------------------------------------------------
+        sure |        686    7.170554    2.734224          1         10
+   unify_fam |        686    6.103499    1.889522          1          8
+    interest |        686    1.393586    .5399808          0          2
+legit_conf~t |        686    .9854227    .1199405          0          1
+   legit_eco |        686    .1137026    .3176814          0          1
+-------------+---------------------------------------------------------
+   legit_env |        686    .2317784    .4222761          0          1
+  factor_edu |        686    .2463557    .4312025          0          1
+ factor_lang |        686    .5976676    .4907261          0          1
+ factor_cult |        686    .1982507     .398973          0          1
+  factor_age |        686    .0335277    .1801413          0          1
+-------------+---------------------------------------------------------
+ factor_work |        686    .1341108      .34102          0          1
+  factor_rel |        686    .0612245    .2399166          0          1
+ factor_skin |        686    .0131195    .1138697          0          1
+ factor_none |        686    .3571429     .479507          0          1
+help_economy |        686    1.482507    .8329791          0          2
+-------------+---------------------------------------------------------
+immigrants~y |        686    .9591837    .8343511          0          2
+  crime_rate |        686    2.548105    .6704531          0          4
+pleas_abroad |        686    2.653061    1.263426          0          4
+surr_forei~r |        686    1.771137    .9613468          0          4
+  surr_crime |        686           1    .8526472          0          4
+-------------+---------------------------------------------------------
+surr_poverty |        686    .8848397    .7486263          0          4
+norms_values |        686    2.196793    1.409267          0          4
+foreign_fr~s |        686    1.090379    .6141833          0          2
+       party |        686     4.91691    2.750518          1         10
+    religion |        686    .6618076    .4734396          0          1
+-------------+---------------------------------------------------------
+        mess |        686    .8236152    .9278005          0          3
+     marital |        686     1.53207     .577933          1          3
+      female |        686    .6209913    .4854943          0          1
+         age |        686    23.56851    6.426483         17         67
+       study |        686     7.37172    4.243365          1         14
+-------------+---------------------------------------------------------
+      origin |          0
+   treatment |        686    2.478134    .9492002          1          4
+         t_1 |        686     .164723     .371201          0          1
+         t_2 |        686    .3527697    .4781805          0          1
+         t_3 |        686    .3221574    .4676439          0          1
+-------------+---------------------------------------------------------
+         t_4 |        686    .1603499    .3671979          0          1
+        econ |        686     .164723     .371201          0          1
+         pol |        686    .3527697    .4781805          0          1
+      env_cc |        686    .3221574    .4676439          0          1
+    env_self |        686    .1603499    .3671979          0          1
+-------------+---------------------------------------------------------
+ imm_opinion |        686    2.938776    1.084347          1          4
+      accept |        686    .6749271    .4687439          0          1
+     accept2 |        383    .7362924     .441219          0          1
+  incomplete |        686           0           0          0          0
+       h_acc |        686    .6749271    .4687439          0          1
+-------------+---------------------------------------------------------
+      single |        686    .5102041    .5002606          0          1
+    austrian |        686    .5641399    .4962308          0          1
+      german |        686    .1895044    .3921947          0          1
+     italian |        686     .164723     .371201          0          1
+origin_other |        686    .0816327     .274004          0          1
+-------------+---------------------------------------------------------
+ factor_norm |        686    .5830904    .4934074          0          1
+         pc1 |        686    7.26e-09    1.564083  -1.452146   8.857426
+ pca_factors |        686    .1408542    .1517117          0          1
+index_attr~s |        686    1.867347    1.522066          0          8
+         pc2 |        686    1.45e-08    1.364844  -2.389476    5.80441
+-------------+---------------------------------------------------------
+    pca_surr |        686    .2916169    .1665686          0          1
+     sur_for |        686    2.771137    .9613468          1          5
+     sur_cri |        686           2    .8526472          1          5
+     sur_pov |        686     1.88484    .7486263          1          5
+  index_surr |        686    2.218659    .6723373          1          5
+-------------+---------------------------------------------------------
+    std_surr |        686    .3046647    .1680843          0          1
+  steal_jobs |        686     .074344    .2625213          0          1
+  tax_burden |        686     .303207    .4599793          0          1
+increase_c~e |        686    .4737609    .4996754          0          1
+immigrants~s |        686    5.86e-09    1.326923  -2.837035   4.116806
+-------------+---------------------------------------------------------
+      geneva |        686    .8250729     .380182          0          1
+   knowledge |        686    .6909621     .462434          0          1
+      age_sq |        686    596.7143    441.2438        289       4489
+  never_mess |        686    .4591837    .4986949          0          1
+diff_friends |        686    .8527697    .3545939          0          1
+-------------+---------------------------------------------------------
+high_inter~t |        686    .4198251    .4938902          0          1
+   legit_all |        686    .0335277    .1801413          0          1
+center_voter |        686    .3425656    .4749139          0          1
+  left_voter |        686     .451895    .4980437          0          1
+ right_voter |        686    .0830904    .2762202          0          1
+-------------+---------------------------------------------------------
+    no_voter |        686     .122449    .3280428          0          1
+asylum_abr~d |        686     .696793    .4599793          0          1
+party_affi~n |        686    1.876093    1.005436          1          4
+    t2_right |        686    .0276968    .1642224          0          1
+    t3_right |        686    .0379009    .1910959          0          1
+-------------+---------------------------------------------------------
+    t4_right |        686    .0029155    .0539555          0          1
+   t2_female |        686    .2157434    .4116372          0          1
+   t3_female |        686    .2069971     .405449          0          1
+   t4_female |        686    .0932945    .2910569          0          1
+
+. 
+end of do-file
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. bysort treatment: pwcorr $impacts
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = CONFLICT
+
+             | steal_~s increa~e tax_bu~n index_~s asylum~d
+-------------+---------------------------------------------
+  steal_jobs |   1.0000 
+increase_c~e |   0.2861   1.0000 
+  tax_burden |   0.4201   0.3882   1.0000 
+index_attr~s |   0.4207   0.2712   0.4195   1.0000 
+asylum_abr~d |  -0.0163   0.1666   0.1484   0.2041   1.0000 
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ENV GLOBAL
+
+             | steal_~s increa~e tax_bu~n index_~s asylum~d
+-------------+---------------------------------------------
+  steal_jobs |   1.0000 
+increase_c~e |   0.2711   1.0000 
+  tax_burden |   0.2791   0.3146   1.0000 
+index_attr~s |   0.3150   0.4206   0.4647   1.0000 
+asylum_abr~d |  -0.0333   0.0078   0.1389   0.1761   1.0000 
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ENV LOCAL
+
+             | steal_~s increa~e tax_bu~n index_~s asylum~d
+-------------+---------------------------------------------
+  steal_jobs |   1.0000 
+increase_c~e |   0.2521   1.0000 
+  tax_burden |   0.3152   0.3320   1.0000 
+index_attr~s |   0.3745   0.3942   0.4168   1.0000 
+asylum_abr~d |   0.0484   0.0829   0.0629   0.2119   1.0000 
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ECON
+
+             | steal_~s increa~e tax_bu~n index_~s asylum~d
+-------------+---------------------------------------------
+  steal_jobs |   1.0000 
+increase_c~e |   0.1972   1.0000 
+  tax_burden |   0.2795   0.3970   1.0000 
+index_attr~s |   0.1842   0.3385   0.3068   1.0000 
+asylum_abr~d |   0.1572   0.0441   0.0390   0.1418   1.0000 
+
+. 
+end of do-file
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. pwcorr high_interest knowledge, sig
+
+             | high_i~t knowle~e
+-------------+------------------
+high_inter~t |   1.0000 
+             |
+             |
+   knowledge |   0.0767   1.0000 
+             |   0.0446
+             |
+
+. 
+end of do-file
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. reg acceptance $interactions1 $socio_demographic $impacts $polit, vce(robust) 
+
+Linear regression                               Number of obs     =        686
+                                                F(8, 677)         =      30.93
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.2440
+                                                Root MSE          =     1.5866
+
+----------------------------------------------------------------------------------
+                 |               Robust
+      acceptance |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-----------------+----------------------------------------------------------------
+      steal_jobs |  -.7726446   .3032945    -2.55   0.011    -1.368156   -.1771337
+  increase_crime |  -.2848909   .1366564    -2.08   0.037    -.5532122   -.0165695
+      tax_burden |   -.599694   .1673969    -3.58   0.000    -.9283735   -.2710144
+index_attributes |  -.2632894   .0505997    -5.20   0.000    -.3626407   -.1639381
+   asylum_abroad |  -.2630433   .1356537    -1.94   0.053    -.5293958    .0033092
+      left_voter |   .0919266   .1430371     0.64   0.521    -.1889231    .3727763
+     right_voter |  -.5864117   .3165605    -1.85   0.064     -1.20797    .0351467
+        no_voter |  -.1934472   .2252813    -0.86   0.391    -.6357813    .2488869
+           _cons |    6.24915   .1754992    35.61   0.000     5.904562    6.593738
+----------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. global socio_demographic single age religion diff_friends index_surr
+
+. global interactions 1_2 t_3 t_4 female t2_female t3_female t4_female
+
+. 
+end of do-file
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. global interactions1 t_2 t_3 t_4 female t2_female t3_female t4_female
+
+. 
+end of do-file
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. *--------------------------------------------------------------------
+. * SCRIPT: 02_analysis.do
+. * PURPOSE: replicates all tables and figures and saves the results
+. *--------------------------------------------------------------------
+. *--------------------------------------------------
+. * AUTHOR GUIDELINES - Regional Environmental Change:
+. * The figures should be 84 mm, 129 mm, or 174 mm wide and not higher than 234 mm.
+. 
+. /* (1) MAIN MANUSCRIPT
+>         - Figure 1: Acceptance by treatment and polarization
+>         - TABLE 2: Overall determinants of acceptance levels with POL as reference group
+>         - TABLE 3: HETEROGENEOUS TREATMENT EFFECTS
+>         (2) SUPPLEMENTARY MATERIALS
+> */
+. *--------------------------------------------------
+. use "$working_ANALYSIS/processed/migration_clean.dta", replace
+
+. 
+. 
+. 
+. *drop incompletely filled out responses
+. *Figure S1: Response rate,  attrition by treatment
+. catplot incomplete, recast(bar) b1title("") over(treatment) vertical asyvars yla(0(50)300) legend(pos(6) ring(1) row(1)) ytitle("Frequency") yla(,no
+> grid) blabel(bar, pos(outside) format(%4.0f)) xsize(`=8.4/2.54') ysize(`=6/2.54')
+
+. gr save "$working_ANALYSIS/results/intermediate/FigureS1.gph", replace
+(file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/intermediate/FigureS1.gph saved)
+
+. gr export "$working_ANALYSIS/results/figures/FigureS1.tif", replace width(4000)
+(file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/figures/FigureS1.tif written in TIFF
+>  format)
+
+. kwallis incomplete, by(treatment)
+
+Kruskal-Wallis equality-of-populations rank test
+
+  +------------------------------+
+  |  treatment | Obs |  Rank Sum |
+  |------------+-----+-----------|
+  |   CONFLICT | 202 | 122653.50 |
+  | ENV GLOBAL | 423 | 253629.00 |
+  |  ENV LOCAL | 375 | 220981.50 |
+  |       ECON | 197 | 119739.00 |
+  +------------------------------+
+
+chi-squared =     0.539 with 3 d.f.
+probability =     0.9102
+
+chi-squared with ties =     0.734 with 3 d.f.
+probability =     0.8651
+
+. *drop all observations where the participants did not complete the survey
+. drop if incomplete==1
+(511 observations deleted)
+
+. 
+. 
+. 
+. 
+. *------------------------------
+. * (1) MAIN MANUSCRIPT
+. *------------------------------
+. *define globals
+. global treatments t_2 t_3 t_4
+
+. global socio_economic female single age religion diff_friends index_surr
+
+. global polit left_voter right_voter no_voter
+
+. global impacts steal_jobs increase_crime tax_burden index_attributes asylum_abroad 
+
+.                 
+. 
+. *Fig 1. Average acceptance and polarization across treatments
+. bysort treatment: su acceptance, detail
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = CONFLICT
+
+                      Acceptance Level
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            2              1
+10%            4              2       Obs                 113
+25%            5              2       Sum of Wgt.         113
+
+50%            6                      Mean           5.522124
+                        Largest       Std. Dev.      1.609666
+75%            7              8
+90%            8              8       Variance       2.591024
+95%            8              8       Skewness      -.3948799
+99%            8              8       Kurtosis       3.066715
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ENV GLOBAL
+
+                      Acceptance Level
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            2              1
+10%            4              1       Obs                 242
+25%            5              1       Sum of Wgt.         242
+
+50%            5                      Mean           5.528926
+                        Largest       Std. Dev.      1.797067
+75%            7              8
+90%            8              8       Variance        3.22945
+95%            8              8       Skewness      -.5350447
+99%            8              8       Kurtosis        3.13398
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ENV LOCAL
+
+                      Acceptance Level
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            2              1       Obs                 221
+25%            4              1       Sum of Wgt.         221
+
+50%            5                      Mean           4.859729
+                        Largest       Std. Dev.      1.802336
+75%            6              8
+90%            7              8       Variance       3.248416
+95%            8              8       Skewness      -.3685667
+99%            8              8       Kurtosis       2.973968
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ECON
+
+                      Acceptance Level
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            2              1
+10%          2.5              2       Obs                 110
+25%            3              2       Sum of Wgt.         110
+
+50%            4                      Mean           4.636364
+                        Largest       Std. Dev.      1.850997
+75%            6              8
+90%            8              8       Variance       3.426188
+95%            8              8       Skewness       .4457027
+99%            8              8       Kurtosis       2.381811
+
+
+. *Panel A: ATE
+. cibar acceptance, over1(treatment)  bargap(20) barlabel(on) blfmt(%5.1f) blpos(10) blgap(0.03) graphopts(xsize(2.5) ysize(2)  legend(ring (1) pos(6)
+>  rows(2)) yla(1(1)8, nogrid) xla(, nogrid)  title("{bf:a} Main treatment effects")  ytitle("Acceptance Level", )) ciopts(lcolor(black) lpattern(dash
+> )) 
+
+. gr save "$working_ANALYSIS/results/intermediate/Figure1a.gph", replace
+(file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/intermediate/Figure1a.gph saved)
+
+. 
+. * H0: NO signficant differences across treatments
+. reg acceptance i.treatment, vce(robust)
+
+Linear regression                               Number of obs     =        686
+                                                F(3, 682)         =      10.23
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.0434
+                                                Root MSE          =     1.7782
+
+------------------------------------------------------------------------------
+             |               Robust
+  acceptance |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+   treatment |
+ ENV GLOBAL  |   .0068017   .1903351     0.04   0.972    -.3669113    .3805148
+  ENV LOCAL  |  -.6623954     .19385    -3.42   0.001     -1.04301   -.2817809
+       ECON  |  -.8857603   .2321741    -3.82   0.000    -1.341622   -.4298983
+             |
+       _cons |   5.522124   .1511946    36.52   0.000     5.225261    5.818987
+------------------------------------------------------------------------------
+
+. * reject, env force and POL significantly higher
+. 
+. *H1: legal status matters?
+. ttest acceptance if treatment==1 | treatment==3, by(treatment)
+
+Two-sample t test with equal variances
+------------------------------------------------------------------------------
+   Group |     Obs        Mean    Std. Err.   Std. Dev.   [95% Conf. Interval]
+---------+--------------------------------------------------------------------
+CONFLICT |     113    5.522124    .1514246    1.609666    5.222095    5.822152
+ENV LOCA |     221    4.859729    .1212383    1.802336    4.620791    5.098666
+---------+--------------------------------------------------------------------
+combined |     334    5.083832    .0965897    1.765241     4.89383    5.273835
+---------+--------------------------------------------------------------------
+    diff |            .6623954    .2011957                .2666163    1.058174
+------------------------------------------------------------------------------
+    diff = mean(CONFLICT) - mean(ENV LOCA)                        t =   3.2923
+Ho: diff = 0                                     degrees of freedom =      332
+
+    Ha: diff < 0                 Ha: diff != 0                 Ha: diff > 0
+ Pr(T < t) = 0.9994         Pr(|T| > |t|) = 0.0011          Pr(T > t) = 0.0006
+
+. ranksum acceptance if treatment==1 | treatment==3, by(treatment)
+
+Two-sample Wilcoxon rank-sum (Mann-Whitney) test
+
+   treatment |      obs    rank sum    expected
+-------------+---------------------------------
+    CONFLICT |      113       21525     18927.5
+   ENV LOCAL |      221       34420     37017.5
+-------------+---------------------------------
+    combined |      334       55945       55945
+
+unadjusted variance   697162.92
+adjustment for ties   -29007.86
+                     ----------
+adjusted variance     668155.06
+
+Ho: accept~e(treatm~t==CONFLICT) = accept~e(treatm~t==ENV LOCAL)
+             z =   3.178
+    Prob > |z| =   0.0015
+
+Note: Exact p-value is not computed by default for sample sizes > 200.
+      Use option exact to compute it.
+
+. *no sign differnece between ENV FORCED and POL p=0.8), legal status seems not to be the main driver of acceptance
+. 
+. *H2: responsibility matters
+. ttest acceptance if treatment==3 | treatment==4, by(treatment)
+
+Two-sample t test with equal variances
+------------------------------------------------------------------------------
+   Group |     Obs        Mean    Std. Err.   Std. Dev.   [95% Conf. Interval]
+---------+--------------------------------------------------------------------
+ENV LOCA |     221    4.859729    .1212383    1.802336    4.620791    5.098666
+    ECON |     110    4.636364    .1764856    1.850997    4.286575    4.986152
+---------+--------------------------------------------------------------------
+combined |     331    4.785498    .0999758    1.818899    4.588828    4.982169
+---------+--------------------------------------------------------------------
+    diff |            .2233649    .2122068               -.1940884    .6408181
+------------------------------------------------------------------------------
+    diff = mean(ENV LOCA) - mean(ECON)                            t =   1.0526
+Ho: diff = 0                                     degrees of freedom =      329
+
+    Ha: diff < 0                 Ha: diff != 0                 Ha: diff > 0
+ Pr(T < t) = 0.8533         Pr(|T| > |t|) = 0.2933          Pr(T > t) = 0.1467
+
+. ranksum acceptance if treatment==3 | treatment==4, by(treatment)
+
+Two-sample Wilcoxon rank-sum (Mann-Whitney) test
+
+   treatment |      obs    rank sum    expected
+-------------+---------------------------------
+   ENV LOCAL |      221     38311.5       36686
+        ECON |      110     16634.5       18260
+-------------+---------------------------------
+    combined |      331       54946       54946
+
+unadjusted variance   672576.67
+adjustment for ties   -22654.17
+                     ----------
+adjusted variance     649922.50
+
+Ho: accept~e(treatm~t==ENV LOCAL) = accept~e(treatm~t==ECON)
+             z =   2.016
+    Prob > |z| =   0.0438
+
+Note: Exact p-value is not computed by default for sample sizes > 200.
+      Use option exact to compute it.
+
+. 
+. *H3: Voluntariness matters?
+. ttest acceptance if treatment==2 | treatment==4, by(treatment)
+
+Two-sample t test with equal variances
+------------------------------------------------------------------------------
+   Group |     Obs        Mean    Std. Err.   Std. Dev.   [95% Conf. Interval]
+---------+--------------------------------------------------------------------
+ENV GLOB |     242    5.528926    .1155199    1.797067    5.301368    5.756483
+    ECON |     110    4.636364    .1764856    1.850997    4.286575    4.986152
+---------+--------------------------------------------------------------------
+combined |     352        5.25    .0990436    1.858223    5.055206    5.444794
+---------+--------------------------------------------------------------------
+    diff |             .892562    .2085993                .4822962    1.302828
+------------------------------------------------------------------------------
+    diff = mean(ENV GLOB) - mean(ECON)                            t =   4.2788
+Ho: diff = 0                                     degrees of freedom =      350
+
+    Ha: diff < 0                 Ha: diff != 0                 Ha: diff > 0
+ Pr(T < t) = 1.0000         Pr(|T| > |t|) = 0.0000          Pr(T > t) = 0.0000
+
+. ranksum acceptance if treatment==2 | treatment==4, by(treatment)
+
+Two-sample Wilcoxon rank-sum (Mann-Whitney) test
+
+   treatment |      obs    rank sum    expected
+-------------+---------------------------------
+  ENV GLOBAL |      242       46915       42713
+        ECON |      110       15213       19415
+-------------+---------------------------------
+    combined |      352       62128       62128
+
+unadjusted variance   783071.67
+adjustment for ties   -23892.44
+                     ----------
+adjusted variance     759179.23
+
+Ho: accept~e(treatm~t==ENV GLOBAL) = accept~e(treatm~t==ECON)
+             z =   4.823
+    Prob > |z| =   0.0000
+
+Note: Exact p-value is not computed by default for sample sizes > 200.
+      Use option exact to compute it.
+
+. 
+. 
+. *Panel B: Distribution by treatment
+. mylabels 0(20)100, myscale(@) local(pctlabel) suffix("%") 
+0 "0%" 20 "20%" 40 "40%" 60 "60%" 80 "80%" 100 "100%"
+
+. catplot imm_opinion, over(treatment) asyvars stack title("{bf:b} Polarization") yla(`pctlabel', nogrid) percent(treatment) legend(pos(6) ring(1) row
+> s(2))  blabel(bar, format(%9.0f) pos(center)) ytitle("") l1title("")  b1title("")  xsize(`=8.4/2.54') ysize(`=6/2.54')
+
+. gr save "$working_ANALYSIS/results/intermediate/Figure1b.gph", replace
+(file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/intermediate/Figure1b.gph saved)
+
+. 
+. gr combine "$working_ANALYSIS/results/intermediate/Figure1a.gph" "$working_ANALYSIS/results/intermediate/Figure1b.gph", rows(1)  xsize(3.465) ysize(
+> 2) iscale(1.1)
+--Break--
+r(1);
+
+end of do-file
+
+--Break--
+r(1);
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. global socio_demographic single age religion diff_friends index_surr
+
+. global interactions1 t_2 t_3 t_4 female t2_female t3_female t4_female
+
+. 
+. *Gender
+. 
+end of do-file
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. reg acceptance $interactions1 $socio_demographic $impacts $polit, vce(robust) 
+
+Linear regression                               Number of obs     =        686
+                                                F(20, 665)        =      16.42
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.3125
+                                                Root MSE          =     1.5266
+
+----------------------------------------------------------------------------------
+                 |               Robust
+      acceptance |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-----------------+----------------------------------------------------------------
+             t_2 |  -.4422804   .3019767    -1.46   0.143    -1.035223    .1506623
+             t_3 |  -.6945263   .3260655    -2.13   0.034    -1.334768   -.0542843
+             t_4 |  -.4652338   .4037369    -1.15   0.250    -1.257986    .3275187
+          female |   -.217936   .2911907    -0.75   0.454       -.7897    .3538279
+       t2_female |   .7430245   .3498001     2.12   0.034     .0561787     1.42987
+       t3_female |   .1553164   .3682795     0.42   0.673    -.5678142    .8784471
+       t4_female |  -.8638661   .4644629    -1.86   0.063    -1.775856    .0481243
+          single |  -.0822662   .1177712    -0.70   0.485    -.3135145    .1489821
+             age |  -.0060593   .0098997    -0.61   0.541    -.0254977    .0133791
+        religion |  -.1235511   .1283433    -0.96   0.336    -.3755579    .1284558
+    diff_friends |   .2060565   .1701804     1.21   0.226    -.1280993    .5402122
+      index_surr |  -.1083259   .1005029    -1.08   0.281    -.3056671    .0890152
+      steal_jobs |  -.9113095   .3059477    -2.98   0.003    -1.512049   -.3105696
+  increase_crime |  -.2071803   .1343748    -1.54   0.124    -.4710303    .0566697
+      tax_burden |  -.5413826   .1631363    -3.32   0.001    -.8617069   -.2210583
+index_attributes |  -.2533478   .0534408    -4.74   0.000    -.3582808   -.1484148
+   asylum_abroad |  -.2417656    .133811    -1.81   0.071    -.5045085    .0209773
+      left_voter |   .0644593    .135945     0.47   0.636    -.2024738    .3313925
+     right_voter |  -.5906938    .301852    -1.96   0.051    -1.183392     .002004
+        no_voter |  -.2307849   .2267983    -1.02   0.309    -.6761118    .2145421
+           _cons |   6.997928   .4402842    15.89   0.000     6.133413    7.862442
+----------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. global interactions1 t_2 t_3 t_4 female t2_female t3_female t4_female
+
+. global interactions2 t_2 t_3 t_4 right_voter t2_right t3_right t4_right
+
+. global polit2 left_voter no_voter
+
+. 
+end of do-file
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. reg acceptance $interactions1 $socio_demographic $impacts $polit, vce(robust) 
+
+Linear regression                               Number of obs     =        686
+                                                F(20, 665)        =      16.42
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.3125
+                                                Root MSE          =     1.5266
+
+----------------------------------------------------------------------------------
+                 |               Robust
+      acceptance |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-----------------+----------------------------------------------------------------
+             t_2 |  -.4422804   .3019767    -1.46   0.143    -1.035223    .1506623
+             t_3 |  -.6945263   .3260655    -2.13   0.034    -1.334768   -.0542843
+             t_4 |  -.4652338   .4037369    -1.15   0.250    -1.257986    .3275187
+          female |   -.217936   .2911907    -0.75   0.454       -.7897    .3538279
+       t2_female |   .7430245   .3498001     2.12   0.034     .0561787     1.42987
+       t3_female |   .1553164   .3682795     0.42   0.673    -.5678142    .8784471
+       t4_female |  -.8638661   .4644629    -1.86   0.063    -1.775856    .0481243
+          single |  -.0822662   .1177712    -0.70   0.485    -.3135145    .1489821
+             age |  -.0060593   .0098997    -0.61   0.541    -.0254977    .0133791
+        religion |  -.1235511   .1283433    -0.96   0.336    -.3755579    .1284558
+    diff_friends |   .2060565   .1701804     1.21   0.226    -.1280993    .5402122
+      index_surr |  -.1083259   .1005029    -1.08   0.281    -.3056671    .0890152
+      steal_jobs |  -.9113095   .3059477    -2.98   0.003    -1.512049   -.3105696
+  increase_crime |  -.2071803   .1343748    -1.54   0.124    -.4710303    .0566697
+      tax_burden |  -.5413826   .1631363    -3.32   0.001    -.8617069   -.2210583
+index_attributes |  -.2533478   .0534408    -4.74   0.000    -.3582808   -.1484148
+   asylum_abroad |  -.2417656    .133811    -1.81   0.071    -.5045085    .0209773
+      left_voter |   .0644593    .135945     0.47   0.636    -.2024738    .3313925
+     right_voter |  -.5906938    .301852    -1.96   0.051    -1.183392     .002004
+        no_voter |  -.2307849   .2267983    -1.02   0.309    -.6761118    .2145421
+           _cons |   6.997928   .4402842    15.89   0.000     6.133413    7.862442
+----------------------------------------------------------------------------------
+
+. testparm t_2 female t2_female
+
+ ( 1)  t_2 = 0
+ ( 2)  female = 0
+ ( 3)  t2_female = 0
+
+       F(  3,   665) =    2.56
+            Prob > F =    0.0543
+
+. local F1 = r(p)
+
+. testparm t_3 female t3_female
+
+ ( 1)  t_3 = 0
+ ( 2)  female = 0
+ ( 3)  t3_female = 0
+
+       F(  3,   665) =    4.71
+            Prob > F =    0.0029
+
+. local F2 = r(p)
+
+. testparm t_4 female t4_female
+
+ ( 1)  t_4 = 0
+ ( 2)  female = 0
+ ( 3)  t4_female = 0
+
+       F(  3,   665) =   12.27
+            Prob > F =    0.0000
+
+. local F3 = r(p)
+
+. outreg2 using "$working_ANALYSIS/results/tables/Table2", drop($socio_demographic $impacts $polit) addstat("Adjusted R-squared", e(r2_a), "F-Test: In
+> teraction ENV GLOBAL", `F1', "F-Test: Interaction ENBV LOCAL ", `F2', "F-Test: Interaction ECON", `F3') adec(2) dec(2) word replace
+C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata/o/outreg2.ado
+C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/tables/Table2.rtf
+dir : seeout
+
+. 
+. *Party preference: Right-wing voter
+. reg acceptance $interactions2 $socio_economic $impacts $polit2, vce(robust) 
+
+Linear regression                               Number of obs     =        686
+                                                F(20, 665)        =      17.43
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.2951
+                                                Root MSE          =     1.5459
+
+----------------------------------------------------------------------------------
+                 |               Robust
+      acceptance |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-----------------+----------------------------------------------------------------
+             t_2 |   .0851926   .1676917     0.51   0.612    -.2440763    .4144615
+             t_3 |   -.490851   .1677217    -2.93   0.004    -.8201789   -.1615231
+             t_4 |  -.8787285   .2257007    -3.89   0.000      -1.3219   -.4355567
+     right_voter |   .1170072    .389459     0.30   0.764    -.6477103    .8817247
+        t2_right |  -.7042674   .5244495    -1.34   0.180    -1.734044    .3255089
+        t3_right |  -.9777787   .5169731    -1.89   0.059    -1.992875    .0373174
+        t4_right |  -1.546292   .5905218    -2.62   0.009    -2.705803     -.38678
+          female |  -.0542974   .1312878    -0.41   0.679     -.312086    .2034912
+          single |  -.0722769   .1204466    -0.60   0.549    -.3087784    .1642246
+             age |  -.0061722   .0104548    -0.59   0.555    -.0267007    .0143563
+        religion |  -.1262394   .1298672    -0.97   0.331    -.3812386    .1287598
+    diff_friends |   .2051755   .1768904     1.16   0.247    -.1421555    .5525066
+      index_surr |   -.113297   .1026388    -1.10   0.270    -.3148322    .0882382
+      steal_jobs |   -.813767    .302109    -2.69   0.007    -1.406969   -.2205646
+  increase_crime |  -.2395161   .1361525    -1.76   0.079    -.5068567    .0278245
+      tax_burden |  -.5741263   .1626565    -3.53   0.000    -.8935084   -.2547441
+index_attributes |  -.2622816   .0539577    -4.86   0.000    -.3682296   -.1563336
+   asylum_abroad |  -.2551707   .1340045    -1.90   0.057    -.5182936    .0079522
+      left_voter |   .0744613        .14     0.53   0.595     -.200434    .3493566
+        no_voter |  -.1608445    .225266    -0.71   0.475    -.6031628    .2814737
+           _cons |   6.867108    .411134    16.70   0.000     6.059831    7.674385
+----------------------------------------------------------------------------------
+
+. testparm t_2 right_voter t2_right
+
+ ( 1)  t_2 = 0
+ ( 2)  right_voter = 0
+ ( 3)  t2_right = 0
+
+       F(  3,   665) =    0.71
+            Prob > F =    0.5433
+
+. local F1 = r(p)
+
+. testparm t_3 right_voter t3_right
+
+ ( 1)  t_3 = 0
+ ( 2)  right_voter = 0
+ ( 3)  t3_right = 0
+
+       F(  3,   665) =    5.62
+            Prob > F =    0.0008
+
+. local F2 = r(p)
+
+. testparm t_4 right_voter t4_right
+
+ ( 1)  t_4 = 0
+ ( 2)  right_voter = 0
+ ( 3)  t4_right = 0
+
+       F(  3,   665) =   12.56
+            Prob > F =    0.0000
+
+. local F3 = r(p)
+
+. outreg2 using "$working_ANALYSIS/results/tables/Table2",drop($socio_economic $impacts $polit2) addstat("Adjusted R-squared", e(r2_a), "F-Test: Inter
+> action ENV GLOBAL", `F1', "F-Test: Interaction ENBV LOCAL ", `F2', "F-Test: Interaction ECON", `F3')  adec(2) dec(2) word append
+C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/tables/Table2.rtf
+dir : seeout
+
+. 
+. 
+end of do-file
+
+. shellout using `"C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/tables/Table2.rtf"'
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. *define globals
+. global overview acceptance female single age religion diff_friends index_surr austrian german italian origin_other center_voter left_voter right_vot
+> er no_voter index_attributes asylum_abroad steal_jobs increase_crime tax_burden knowledge legit_conflict legit_eco legit_env high_interest
+
+. global balance female single age religion diff_friends index_surr austrian german italian origin_other center_voter left_voter right_voter no_voter 
+> knowledge high_interest
+
+. global opinions steal_jobs increase_crime tax_burden index_attributes index_surr asylum_abroad
+
+. 
+. 
+. *TABLE S1:  Summary statistics
+. estpost tabstat $overview, statistics(count mean sd min max) columns(statistics)
+
+Summary statistics: count mean sd min max
+     for variables: acceptance female single age religion diff_friends index_surr austrian german italian origin_other center_voter left_voter right_v
+> oter no_voter index_attributes asylum_abroad steal_jobs increase_crime tax_burden knowledge legit_conflict legit_eco legit_env high_interest
+
+             |  e(count)    e(mean)      e(sd)     e(min)     e(max) 
+-------------+-------------------------------------------------------
+  acceptance |       686   5.169096   1.814131          1          8 
+      female |       686   .6209913   .4854943          0          1 
+      single |       686   .5102041   .5002606          0          1 
+         age |       686   23.56851   6.426483         17         67 
+    religion |       686   .6618076   .4734396          0          1 
+diff_friends |       686   .8527697   .3545939          0          1 
+  index_surr |       686   2.218659   .6723373          1          5 
+    austrian |       686   .5641399   .4962308          0          1 
+      german |       686   .1895044   .3921947          0          1 
+     italian |       686    .164723    .371201          0          1 
+origin_other |       686   .0816327    .274004          0          1 
+center_voter |       686   .3425656   .4749139          0          1 
+  left_voter |       686    .451895   .4980437          0          1 
+ right_voter |       686   .0830904   .2762202          0          1 
+    no_voter |       686    .122449   .3280428          0          1 
+index_attr~s |       686   1.867347   1.522066          0          8 
+asylum_abr~d |       686    .696793   .4599793          0          1 
+  steal_jobs |       686    .074344   .2625213          0          1 
+increase_c~e |       686   .4737609   .4996754          0          1 
+  tax_burden |       686    .303207   .4599793          0          1 
+   knowledge |       686   .6909621    .462434          0          1 
+legit_conf~t |       686   .9854227   .1199405          0          1 
+   legit_eco |       686   .1137026   .3176814          0          1 
+   legit_env |       686   .2317784   .4222761          0          1 
+high_inter~t |       686   .4198251   .4938902          0          1 
+
+. esttab . using "$working_ANALYSIS/results/tables/TableS1.rtf" , replace cells("count(fmt(0)) mean(fmt(%9.2fc)) sd(fmt(%9.2fc)) min(fmt(0)) max(fmt(0
+> ))")  not nostar unstack nomtitle nonumber nonote label 
+(note: file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/tables/TableS1.rtf not found)
+(output written to C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/tables/TableS1.rtf)
+
+.  
+. 
+end of do-file
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. estpost tabstat $overview, statistics(mean sd min max) columns(statistics)
+
+Summary statistics: mean sd min max
+     for variables: acceptance female single age religion diff_friends index_surr austrian german italian origin_other center_voter left_voter right_v
+> oter no_voter index_attributes asylum_abroad steal_jobs increase_crime tax_burden knowledge legit_conflict legit_eco legit_env high_interest
+
+             |   e(mean)      e(sd)     e(min)     e(max) 
+-------------+--------------------------------------------
+  acceptance |  5.169096   1.814131          1          8 
+      female |  .6209913   .4854943          0          1 
+      single |  .5102041   .5002606          0          1 
+         age |  23.56851   6.426483         17         67 
+    religion |  .6618076   .4734396          0          1 
+diff_friends |  .8527697   .3545939          0          1 
+  index_surr |  2.218659   .6723373          1          5 
+    austrian |  .5641399   .4962308          0          1 
+      german |  .1895044   .3921947          0          1 
+     italian |   .164723    .371201          0          1 
+origin_other |  .0816327    .274004          0          1 
+center_voter |  .3425656   .4749139          0          1 
+  left_voter |   .451895   .4980437          0          1 
+ right_voter |  .0830904   .2762202          0          1 
+    no_voter |   .122449   .3280428          0          1 
+index_attr~s |  1.867347   1.522066          0          8 
+asylum_abr~d |   .696793   .4599793          0          1 
+  steal_jobs |   .074344   .2625213          0          1 
+increase_c~e |  .4737609   .4996754          0          1 
+  tax_burden |   .303207   .4599793          0          1 
+   knowledge |  .6909621    .462434          0          1 
+legit_conf~t |  .9854227   .1199405          0          1 
+   legit_eco |  .1137026   .3176814          0          1 
+   legit_env |  .2317784   .4222761          0          1 
+high_inter~t |  .4198251   .4938902          0          1 
+
+. esttab . using "$working_ANALYSIS/results/tables/TableS1.rtf" , replace cells("mean(fmt(%9.2fc)) sd(fmt(%9.2fc)) min(fmt(0)) max(fmt(0))")  not nost
+> ar unstack nomtitle nonumber nonote label 
+(output written to C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/tables/TableS1.rtf)
+
+.  
+. 
+end of do-file
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. *TABLE S2: Treatment balance
+. iebaltab $balance, grpvar(treatment) onerow rowvarlabels format(%9.2f) stdev ftest fmissok tblnonote save("$working_ANALYSIS/results/tables/TablesS2
+> .xlsx") replace
+    Balance table saved to: C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey
+        experiment\Submission\replication_REC/results/tables/TablesS2.xlsx
+
+. 
+end of do-file
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. cibar acceptance, over1(tax_burden) over2( treatment) gap(30) barlabel(on) blfmt(%5.1f) blpos(10) blgap(0.03) graphopts(xsize(`=8.4/2.54') ysize(`=6
+> /2.54')  legend(ring (1) pos(6) rows(1))  yla(1(1)8, nogrid) xla(, nogrid) ytitle("Average acceptance")) ciopts(lcolor(gs3) lpattern(dash))
+
+. gr save "$working_ANALYSIS/results/intermediate/figureS2.gph", replace
+(file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/intermediate/figureS2.gph saved)
+
+. gr export "$working_ANALYSIS/results/figures/figureS2.tif", replace width(4000)
+(file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/figures/figureS2.tif written in TIFF
+>  format)
+
+. 
+end of do-file
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. *Figure S3.     Heterogeneous treatment effects by knowledge of the Geneva convention
+. cibar acceptance, over1(geneva) over2( treatment) gap(30) barlabel(on) blfmt(%5.1f) blpos(10) blgap(0.03) graphopts(xsize(`=8.4/2.54') ysize(`=6/2.5
+> 4')  legend(ring (1) pos(6) rows(1))  yla(1(1)8, nogrid) xla(, nogrid) ytitle("Average acceptance")) ciopts(lcolor(gs3) lpattern(dash))
+
+. gr save "$working_ANALYSIS/results/intermediate/figureS3.gph", replace
+(file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/intermediate/figureS3.gph saved)
+
+. gr export "$working_ANALYSIS/results/figures/figureS3.tif", replace width(4000)
+(file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/figures/figureS3.tif written in TIFF
+>  format)
+
+. 
+end of do-file
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. ologit acceptance $treatments, vce(robust) or
+
+Iteration 0:   log pseudolikelihood = -1301.9588  
+Iteration 1:   log pseudolikelihood = -1283.2632  
+Iteration 2:   log pseudolikelihood = -1283.1763  
+Iteration 3:   log pseudolikelihood = -1283.1763  
+
+Ordered logistic regression                     Number of obs     =        686
+                                                Wald chi2(3)      =      34.28
+                                                Prob > chi2       =     0.0000
+Log pseudolikelihood = -1283.1763               Pseudo R2         =     0.0144
+
+------------------------------------------------------------------------------
+             |               Robust
+  acceptance | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         t_2 |   1.049617   .1988476     0.26   0.798      .724057     1.52156
+         t_3 |   .5391553   .1029886    -3.23   0.001      .370782    .7839875
+         t_4 |   .3455764   .0859585    -4.27   0.000     .2122348    .5626928
+-------------+----------------------------------------------------------------
+       /cut1 |  -3.463753   .2369007                     -3.928069   -2.999436
+       /cut2 |  -2.787733   .2049961                     -3.189518   -2.385948
+       /cut3 |  -2.183696   .1788301                     -2.534197   -1.833195
+       /cut4 |  -1.104921   .1639391                     -1.426235   -.7836058
+       /cut5 |   .0396479    .157437                     -.2689229    .3482188
+       /cut6 |   .9475522    .160515                      .6329486    1.262156
+       /cut7 |   1.533557   .1665373                       1.20715    1.859965
+------------------------------------------------------------------------------
+Note: Estimates are transformed only in the first equation.
+
+. 
+end of do-file
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. * no controls
+. ologit acceptance $treatments, vce(robust) or
+
+Iteration 0:   log pseudolikelihood = -1301.9588  
+Iteration 1:   log pseudolikelihood = -1283.2632  
+Iteration 2:   log pseudolikelihood = -1283.1763  
+Iteration 3:   log pseudolikelihood = -1283.1763  
+
+Ordered logistic regression                     Number of obs     =        686
+                                                Wald chi2(3)      =      34.28
+                                                Prob > chi2       =     0.0000
+Log pseudolikelihood = -1283.1763               Pseudo R2         =     0.0144
+
+------------------------------------------------------------------------------
+             |               Robust
+  acceptance | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         t_2 |   1.049617   .1988476     0.26   0.798      .724057     1.52156
+         t_3 |   .5391553   .1029886    -3.23   0.001      .370782    .7839875
+         t_4 |   .3455764   .0859585    -4.27   0.000     .2122348    .5626928
+-------------+----------------------------------------------------------------
+       /cut1 |  -3.463753   .2369007                     -3.928069   -2.999436
+       /cut2 |  -2.787733   .2049961                     -3.189518   -2.385948
+       /cut3 |  -2.183696   .1788301                     -2.534197   -1.833195
+       /cut4 |  -1.104921   .1639391                     -1.426235   -.7836058
+       /cut5 |   .0396479    .157437                     -.2689229    .3482188
+       /cut6 |   .9475522    .160515                      .6329486    1.262156
+       /cut7 |   1.533557   .1665373                       1.20715    1.859965
+------------------------------------------------------------------------------
+Note: Estimates are transformed only in the first equation.
+
+. local R2= e(r2_p)
+
+. outreg2 using "$working_ANALYSIS/results/tables/TableS3", addstat("Pseudo R-squared", `R2') adec(2) dec(2) word replace
+C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/tables/TableS3.rtf
+dir : seeout
+
+. 
+. *socio-demographics
+. ologit acceptance $treatments $socio_economic, vce(robust) or
+
+Iteration 0:   log pseudolikelihood = -1301.9588  
+Iteration 1:   log pseudolikelihood = -1271.5404  
+Iteration 2:   log pseudolikelihood = -1271.2991  
+Iteration 3:   log pseudolikelihood =  -1271.299  
+
+Ordered logistic regression                     Number of obs     =        686
+                                                Wald chi2(9)      =      48.72
+                                                Prob > chi2       =     0.0000
+Log pseudolikelihood =  -1271.299               Pseudo R2         =     0.0235
+
+------------------------------------------------------------------------------
+             |               Robust
+  acceptance | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         t_2 |   1.037827   .1995353     0.19   0.847     .7119844    1.512792
+         t_3 |   .5286371   .1020276    -3.30   0.001     .3621386    .7716858
+         t_4 |   .3310889   .0848246    -4.31   0.000     .2003861    .5470432
+      female |   1.340226   .2011828     1.95   0.051     .9986268    1.798676
+      single |   .8794695   .1207572    -0.94   0.350     .6719624    1.151056
+         age |   1.002198    .010812     0.20   0.839     .9812291    1.023615
+    religion |   .7483645   .1157986    -1.87   0.061     .5525888    1.013501
+diff_friends |   1.659446   .3163542     2.66   0.008     1.142067    2.411209
+  index_surr |    .685806   .0942983    -2.74   0.006     .5237947     .897928
+-------------+----------------------------------------------------------------
+       /cut1 |  -3.959342   .4931246                     -4.925848   -2.992835
+       /cut2 |  -3.271459   .4828789                     -4.217884   -2.325033
+       /cut3 |   -2.65307   .4677308                     -3.569806   -1.736335
+       /cut4 |  -1.548935   .4647959                     -2.459919   -.6379522
+       /cut5 |  -.3833479   .4574761                     -1.279985    .5132889
+       /cut6 |   .5412053   .4548662                      -.350316    1.432727
+       /cut7 |   1.136865   .4567981                      .2415571    2.032173
+------------------------------------------------------------------------------
+Note: Estimates are transformed only in the first equation.
+
+. testparm $socio_economic
+
+ ( 1)  [acceptance]female = 0
+ ( 2)  [acceptance]single = 0
+ ( 3)  [acceptance]age = 0
+ ( 4)  [acceptance]religion = 0
+ ( 5)  [acceptance]diff_friends = 0
+ ( 6)  [acceptance]index_surr = 0
+
+           chi2(  6) =   17.55
+         Prob > chi2 =    0.0075
+
+. local F1 = r(p)
+
+. local R2= e(r2_p)
+
+. outreg2 using "$working_ANALYSIS/results/tables/TableS3", addstat("Pseudo R-squared", `R2', "F-Test: Socio-demographics", `F1') adec(2) dec(2) word 
+> append
+C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/tables/TableS3.rtf
+dir : seeout
+
+. 
+. * Attitudes towards immigration
+. ologit acceptance $treatments $socio_economic $impacts, vce(robust) or
+
+Iteration 0:   log pseudolikelihood = -1301.9588  
+Iteration 1:   log pseudolikelihood = -1193.1122  
+Iteration 2:   log pseudolikelihood = -1185.9868  
+Iteration 3:   log pseudolikelihood = -1185.9477  
+Iteration 4:   log pseudolikelihood = -1185.9477  
+
+Ordered logistic regression                     Number of obs     =        686
+                                                Wald chi2(14)     =     192.97
+                                                Prob > chi2       =     0.0000
+Log pseudolikelihood = -1185.9477               Pseudo R2         =     0.0891
+
+----------------------------------------------------------------------------------
+                 |               Robust
+      acceptance | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-----------------+----------------------------------------------------------------
+             t_2 |   1.070762   .2005679     0.37   0.715       .74174    1.545732
+             t_3 |   .5067076   .0938692    -3.67   0.000     .3524274    .7285263
+             t_4 |   .2619718   .0724837    -4.84   0.000      .152314    .4505773
+          female |   .9454997   .1443295    -0.37   0.714     .7010135    1.275253
+          single |   .9139102   .1277113    -0.64   0.519     .6949527    1.201854
+             age |   .9934049   .0115094    -0.57   0.568      .971101    1.016221
+        religion |    .879497   .1397832    -0.81   0.419     .6440926    1.200938
+    diff_friends |   1.148648   .2275934     0.70   0.484     .7789864     1.69373
+      index_surr |   .7954808   .1000526    -1.82   0.069     .6216827    1.017866
+      steal_jobs |   .3172958   .1159414    -3.14   0.002     .1550355    .6493779
+  increase_crime |   .7668595   .1155473    -1.76   0.078     .5707687    1.030318
+      tax_burden |   .4555095   .0844621    -4.24   0.000     .3167122    .6551339
+index_attributes |   .7016952   .0417979    -5.95   0.000     .6243743    .7885914
+   asylum_abroad |   .7084442   .1094793    -2.23   0.026     .5233176    .9590604
+-----------------+----------------------------------------------------------------
+           /cut1 |   -6.19603   .5584053                     -7.290484   -5.101576
+           /cut2 |   -5.37273   .5274028                      -6.40642   -4.339039
+           /cut3 |  -4.609864   .5074715                     -5.604489   -3.615238
+           /cut4 |  -3.269913   .4928469                     -4.235875    -2.30395
+           /cut5 |  -1.908113   .4759352                     -2.840929   -.9752975
+           /cut6 |  -.8824499   .4676628                     -1.799052    .0341524
+           /cut7 |   -.243504   .4680322                      -1.16083    .6738222
+----------------------------------------------------------------------------------
+Note: Estimates are transformed only in the first equation.
+
+. testparm $socio_economic
+
+ ( 1)  [acceptance]female = 0
+ ( 2)  [acceptance]single = 0
+ ( 3)  [acceptance]age = 0
+ ( 4)  [acceptance]religion = 0
+ ( 5)  [acceptance]diff_friends = 0
+ ( 6)  [acceptance]index_surr = 0
+
+           chi2(  6) =    4.56
+         Prob > chi2 =    0.6014
+
+. local F1 = r(p)
+
+. testparm $impacts
+
+ ( 1)  [acceptance]steal_jobs = 0
+ ( 2)  [acceptance]increase_crime = 0
+ ( 3)  [acceptance]tax_burden = 0
+ ( 4)  [acceptance]index_attributes = 0
+ ( 5)  [acceptance]asylum_abroad = 0
+
+           chi2(  5) =  156.18
+         Prob > chi2 =    0.0000
+
+. local F2 = r(p)
+
+. local R2= e(r2_p)
+
+. outreg2 using "$working_ANALYSIS/results/tables/TableS3", addstat("Pseudo R-squared", `R2', "F-Test: Socio-demographics", `F1', "F-Test: Attitudes",
+>  `F2') adec(2) dec(2) word append
+C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/tables/TableS3.rtf
+dir : seeout
+
+. 
+. * Political orientation: Party preferences
+. ologit acceptance $treatments $socio_economic $impacts $polit, vce(robust) or
+
+Iteration 0:   log pseudolikelihood = -1301.9588  
+Iteration 1:   log pseudolikelihood = -1194.6722  
+Iteration 2:   log pseudolikelihood = -1182.5859  
+Iteration 3:   log pseudolikelihood = -1182.4123  
+Iteration 4:   log pseudolikelihood = -1182.4123  
+
+Ordered logistic regression                     Number of obs     =        686
+                                                Wald chi2(17)     =     211.58
+                                                Prob > chi2       =     0.0000
+Log pseudolikelihood = -1182.4123               Pseudo R2         =     0.0918
+
+----------------------------------------------------------------------------------
+                 |               Robust
+      acceptance | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-----------------+----------------------------------------------------------------
+             t_2 |   1.053092   .1984107     0.27   0.784     .7279364    1.523489
+             t_3 |   .5076043   .0944753    -3.64   0.000     .3524517    .7310564
+             t_4 |   .2515333   .0704808    -4.93   0.000     .1452395    .4356184
+          female |   .9202847   .1401337    -0.55   0.585     .6828227    1.240328
+          single |   .9182467   .1284056    -0.61   0.542     .6981186    1.207785
+             age |   .9925739   .0115934    -0.64   0.523     .9701094    1.015559
+        religion |   .8613953    .135995    -0.95   0.345     .6321452    1.173784
+    diff_friends |   1.153615   .2255952     0.73   0.465     .7863286    1.692457
+      index_surr |   .8155539   .1040236    -1.60   0.110     .6351586    1.047184
+      steal_jobs |   .3847539   .1441666    -2.55   0.011     .1846032     .801912
+  increase_crime |   .8031412    .123525    -1.43   0.154     .5941213    1.085697
+      tax_burden |   .4959915   .0938617    -3.71   0.000     .3422885    .7187139
+index_attributes |    .725075    .044925    -5.19   0.000     .6421601    .8186958
+   asylum_abroad |   .7343087   .1144921    -1.98   0.048     .5409546    .9967735
+      left_voter |    1.07268   .1735773     0.43   0.665     .7811456     1.47302
+     right_voter |   .4594107    .177502    -2.01   0.044     .2154385    .9796679
+        no_voter |   .7990704   .2181827    -0.82   0.411     .4679163    1.364589
+-----------------+----------------------------------------------------------------
+           /cut1 |   -6.16946   .5785974                      -7.30349    -5.03543
+           /cut2 |   -5.32453    .546822                     -6.396281   -4.252779
+           /cut3 |  -4.537407    .527635                     -5.571552   -3.503261
+           /cut4 |  -3.170095    .514144                     -4.177798   -2.162391
+           /cut5 |  -1.803776   .4994706                      -2.78272   -.8248312
+           /cut6 |  -.7832972   .4913005                     -1.746228     .179634
+           /cut7 |  -.1487367   .4941872                     -1.117326    .8198524
+----------------------------------------------------------------------------------
+Note: Estimates are transformed only in the first equation.
+
+. testparm $socio_economic
+
+ ( 1)  [acceptance]female = 0
+ ( 2)  [acceptance]single = 0
+ ( 3)  [acceptance]age = 0
+ ( 4)  [acceptance]religion = 0
+ ( 5)  [acceptance]diff_friends = 0
+ ( 6)  [acceptance]index_surr = 0
+
+           chi2(  6) =    4.22
+         Prob > chi2 =    0.6464
+
+. local F1 = r(p)
+
+. testparm $impacts
+
+ ( 1)  [acceptance]steal_jobs = 0
+ ( 2)  [acceptance]increase_crime = 0
+ ( 3)  [acceptance]tax_burden = 0
+ ( 4)  [acceptance]index_attributes = 0
+ ( 5)  [acceptance]asylum_abroad = 0
+
+           chi2(  5) =   75.75
+         Prob > chi2 =    0.0000
+
+. local F2 = r(p)
+
+. testparm $polit
+
+ ( 1)  [acceptance]left_voter = 0
+ ( 2)  [acceptance]right_voter = 0
+ ( 3)  [acceptance]no_voter = 0
+
+           chi2(  3) =    4.75
+         Prob > chi2 =    0.1914
+
+. local F3 = r(p)
+
+. local R2= e(r2_p)
+
+. outreg2 using "$working_ANALYSIS/results/tables/TableS3", addstat("Pseudo R-squared", `R2', "F-Test: Socio-demographics", `F1', "F-Test: Attitudes",
+>  `F2', "F-Test: Party preferences", `F3') adec(2) dec(2) word append
+C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/tables/TableS3.rtf
+dir : seeout
+
+. 
+end of do-file
+
+. shellout using `"C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/tables/TableS3.rtf"'
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. *Table S4.      Binary– Main treatment effects of acceptance rate
+. * no controls
+. probit h_acc $treatments, vce(robust)
+
+Iteration 0:   log pseudolikelihood = -432.61512  
+Iteration 1:   log pseudolikelihood = -409.98203  
+Iteration 2:   log pseudolikelihood = -409.96868  
+Iteration 3:   log pseudolikelihood = -409.96868  
+
+Probit regression                               Number of obs     =        686
+                                                Wald chi2(3)      =      44.33
+                                                Prob > chi2       =     0.0000
+Log pseudolikelihood = -409.96868               Pseudo R2         =     0.0523
+
+------------------------------------------------------------------------------
+             |               Robust
+       h_acc |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         t_2 |   .0663903   .1565316     0.42   0.671     -.240406    .3731866
+         t_3 |  -.2796025   .1551248    -1.80   0.071    -.5836416    .0244366
+         t_4 |  -.8880153   .1761762    -5.04   0.000    -1.233314   -.5427163
+       _cons |   .6814683   .1285051     5.30   0.000     .4296029    .9333337
+------------------------------------------------------------------------------
+
+. local R2= e(r2_p)
+
+. margins, dydx(*) post
+
+Average marginal effects                        Number of obs     =        686
+Model VCE    : Robust
+
+Expression   : Pr(h_acc), predict()
+dy/dx w.r.t. : t_2 t_3 t_4
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         t_2 |    .022551   .0531524     0.42   0.671    -.0816258    .1267278
+         t_3 |  -.0949735   .0523497    -1.81   0.070    -.1975771    .0076301
+         t_4 |   -.301635   .0564431    -5.34   0.000    -.4122614   -.1910086
+------------------------------------------------------------------------------
+
+. outreg2 using "$working_ANALYSIS/results/tables/TableS4", addstat("Pseudo R-squared", `R2') adec(2) dec(2) word replace
+C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/tables/TableS4.rtf
+dir : seeout
+
+. 
+. *socio-demographics
+. probit h_acc  $treatments $socio_economic, vce(robust)
+
+Iteration 0:   log pseudolikelihood = -432.61512  
+Iteration 1:   log pseudolikelihood = -401.39728  
+Iteration 2:   log pseudolikelihood = -401.33556  
+Iteration 3:   log pseudolikelihood = -401.33556  
+
+Probit regression                               Number of obs     =        686
+                                                Wald chi2(9)      =      55.38
+                                                Prob > chi2       =     0.0000
+Log pseudolikelihood = -401.33556               Pseudo R2         =     0.0723
+
+------------------------------------------------------------------------------
+             |               Robust
+       h_acc |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         t_2 |   .0607946   .1565389     0.39   0.698    -.2460159    .3676052
+         t_3 |   -.289853   .1553712    -1.87   0.062     -.594375    .0146689
+         t_4 |   -.898142   .1792686    -5.01   0.000    -1.249502    -.546782
+      female |   .2219063   .1073092     2.07   0.039     .0115841    .4322286
+      single |  -.0589186   .1062715    -0.55   0.579    -.2672069    .1493697
+         age |   .0092691     .00801     1.16   0.247    -.0064302    .0249683
+    religion |   .0278274   .1106189     0.25   0.801    -.1889816    .2446364
+diff_friends |   .2520355   .1447185     1.74   0.082    -.0316075    .5356786
+  index_surr |  -.2233254   .0803365    -2.78   0.005     -.380782   -.0658688
+       _cons |    .636024   .3434201     1.85   0.064     -.037067    1.309115
+------------------------------------------------------------------------------
+
+. local R2= e(r2_p)
+
+. testparm $socio_economic
+
+ ( 1)  [h_acc]female = 0
+ ( 2)  [h_acc]single = 0
+ ( 3)  [h_acc]age = 0
+ ( 4)  [h_acc]religion = 0
+ ( 5)  [h_acc]diff_friends = 0
+ ( 6)  [h_acc]index_surr = 0
+
+           chi2(  6) =   15.49
+         Prob > chi2 =    0.0168
+
+. local F1 = r(p)
+
+. margins, dydx(*) post
+
+Average marginal effects                        Number of obs     =        686
+Model VCE    : Robust
+
+Expression   : Pr(h_acc), predict()
+dy/dx w.r.t. : t_2 t_3 t_4 female single age religion diff_friends index_surr
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         t_2 |   .0201916   .0519725     0.39   0.698    -.0816726    .1220559
+         t_3 |  -.0962685   .0512772    -1.88   0.060      -.19677    .0042331
+         t_4 |  -.2982986   .0561872    -5.31   0.000    -.4084234   -.1881738
+      female |   .0737014    .035379     2.08   0.037     .0043599     .143043
+      single |  -.0195685   .0352704    -0.55   0.579    -.0886973    .0495602
+         age |   .0030785   .0026534     1.16   0.246    -.0021221    .0082791
+    religion |   .0092423   .0367487     0.25   0.801    -.0627838    .0812683
+diff_friends |   .0837082    .047728     1.75   0.079     -.009837    .1772534
+  index_surr |  -.0741727   .0261537    -2.84   0.005     -.125433   -.0229125
+------------------------------------------------------------------------------
+
+. outreg2 using "$working_ANALYSIS/results/tables/TableS4", addstat("Pseudo R-squared", `R2', "F-Test: Socio-demographics", `F1') adec(2) dec(2) word 
+> append
+C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/tables/TableS4.rtf
+dir : seeout
+
+. 
+. * Attitudes towards immigration
+. probit h_acc $treatments $socio_economic $impacts, vce(robust)
+
+Iteration 0:   log pseudolikelihood = -432.61512  
+Iteration 1:   log pseudolikelihood = -343.64532  
+Iteration 2:   log pseudolikelihood = -343.08642  
+Iteration 3:   log pseudolikelihood = -343.08604  
+Iteration 4:   log pseudolikelihood = -343.08604  
+
+Probit regression                               Number of obs     =        686
+                                                Wald chi2(14)     =     130.60
+                                                Prob > chi2       =     0.0000
+Log pseudolikelihood = -343.08604               Pseudo R2         =     0.2069
+
+----------------------------------------------------------------------------------
+                 |               Robust
+           h_acc |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-----------------+----------------------------------------------------------------
+             t_2 |     .03655   .1692575     0.22   0.829    -.2951885    .3682885
+             t_3 |  -.3417427   .1666525    -2.05   0.040    -.6683757   -.0151098
+             t_4 |   -1.07584   .2000263    -5.38   0.000    -1.467885   -.6837961
+          female |   .0070833   .1174548     0.06   0.952    -.2231239    .2372904
+          single |  -.0609731   .1136805    -0.54   0.592    -.2837828    .1618367
+             age |   .0060861   .0087726     0.69   0.488     -.011108    .0232801
+        religion |   .1596856   .1208263     1.32   0.186    -.0771297    .3965009
+    diff_friends |   .0904321   .1630975     0.55   0.579    -.2292332    .4100974
+      index_surr |  -.0865098   .0833094    -1.04   0.299    -.2497931    .0767736
+      steal_jobs |  -.6627964   .2454718    -2.70   0.007    -1.143912   -.1816806
+  increase_crime |  -.0353351   .1237128    -0.29   0.775    -.2778078    .2071375
+      tax_burden |  -.5769743   .1313131    -4.39   0.000    -.8343432   -.3196055
+index_attributes |  -.1927155   .0437116    -4.41   0.000    -.2783887   -.1070423
+   asylum_abroad |  -.3323977   .1268733    -2.62   0.009    -.5810647   -.0837306
+           _cons |   1.537545   .3884432     3.96   0.000     .7762102     2.29888
+----------------------------------------------------------------------------------
+
+. testparm $socio_economic
+
+ ( 1)  [h_acc]female = 0
+ ( 2)  [h_acc]single = 0
+ ( 3)  [h_acc]age = 0
+ ( 4)  [h_acc]religion = 0
+ ( 5)  [h_acc]diff_friends = 0
+ ( 6)  [h_acc]index_surr = 0
+
+           chi2(  6) =    4.29
+         Prob > chi2 =    0.6373
+
+. local F1 = r(p)
+
+. testparm $impacts
+
+ ( 1)  [h_acc]steal_jobs = 0
+ ( 2)  [h_acc]increase_crime = 0
+ ( 3)  [h_acc]tax_burden = 0
+ ( 4)  [h_acc]index_attributes = 0
+ ( 5)  [h_acc]asylum_abroad = 0
+
+           chi2(  5) =   99.02
+         Prob > chi2 =    0.0000
+
+. local F2 = r(p)
+
+. local R2= e(r2_p)
+
+. margins, dydx(*) post
+
+Average marginal effects                        Number of obs     =        686
+Model VCE    : Robust
+
+Expression   : Pr(h_acc), predict()
+dy/dx w.r.t. : t_2 t_3 t_4 female single age religion diff_friends index_surr steal_jobs increase_crime tax_burden index_attributes asylum_abroad
+
+----------------------------------------------------------------------------------
+                 |            Delta-method
+                 |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-----------------+----------------------------------------------------------------
+             t_2 |   .0102844   .0476023     0.22   0.829    -.0830143    .1035831
+             t_3 |  -.0961589   .0467012    -2.06   0.039    -.1876916   -.0046263
+             t_4 |   -.302718   .0525518    -5.76   0.000    -.4057176   -.1997184
+          female |   .0019931   .0330513     0.06   0.952    -.0627862    .0667724
+          single |  -.0171565   .0319957    -0.54   0.592    -.0798669    .0455539
+             age |   .0017125    .002466     0.69   0.487    -.0031209    .0065458
+        religion |    .044932   .0338555     1.33   0.184    -.0214236    .1112876
+    diff_friends |   .0254456   .0458635     0.55   0.579    -.0644451    .1153363
+      index_surr |   -.024342   .0233368    -1.04   0.297    -.0700813    .0213974
+      steal_jobs |  -.1864964   .0675959    -2.76   0.006     -.318982   -.0540108
+  increase_crime |  -.0099425   .0348159    -0.29   0.775    -.0781805    .0582954
+      tax_burden |   -.162348   .0353686    -4.59   0.000    -.2316692   -.0930267
+index_attributes |  -.0542259   .0118736    -4.57   0.000    -.0774977   -.0309542
+   asylum_abroad |  -.0935294    .035241    -2.65   0.008    -.1626005   -.0244584
+----------------------------------------------------------------------------------
+
+. outreg2 using "$working_ANALYSIS/results/tables/TableS4", addstat("Pseudo R-squared", `R2', "F-Test: Socio-demographics", `F1', "F-Test: Attitudes",
+>  `F2') adec(2) dec(2) word append
+C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/tables/TableS4.rtf
+dir : seeout
+
+. 
+. 
+. * Political orientation: Party preferences
+. probit h_acc $treatments $socio_economic $impacts $polit, vce(robust)
+
+Iteration 0:   log pseudolikelihood = -432.61512  
+Iteration 1:   log pseudolikelihood = -338.55057  
+Iteration 2:   log pseudolikelihood =  -337.7655  
+Iteration 3:   log pseudolikelihood =  -337.7645  
+Iteration 4:   log pseudolikelihood =  -337.7645  
+
+Probit regression                               Number of obs     =        686
+                                                Wald chi2(17)     =     151.35
+                                                Prob > chi2       =     0.0000
+Log pseudolikelihood =  -337.7645               Pseudo R2         =     0.2192
+
+----------------------------------------------------------------------------------
+                 |               Robust
+           h_acc |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-----------------+----------------------------------------------------------------
+             t_2 |   .0249737   .1712542     0.15   0.884    -.3106784    .3606258
+             t_3 |  -.3342007   .1698618    -1.97   0.049    -.6671238   -.0012776
+             t_4 |  -1.086164   .1988384    -5.46   0.000     -1.47588   -.6964483
+          female |  -.0172306   .1197582    -0.14   0.886    -.2519523    .2174912
+          single |  -.0532512   .1141386    -0.47   0.641    -.2769587    .1704563
+             age |    .004162   .0089704     0.46   0.643    -.0134197    .0217437
+        religion |   .1392827    .122173     1.14   0.254    -.1001721    .3787374
+    diff_friends |   .0770342   .1621053     0.48   0.635    -.2406863    .3947547
+      index_surr |  -.0713252   .0865974    -0.82   0.410    -.2410529    .0984025
+      steal_jobs |  -.5895432   .2581014    -2.28   0.022    -1.095413   -.0836738
+  increase_crime |   .0051627   .1259646     0.04   0.967    -.2417232    .2520487
+      tax_burden |  -.5113913   .1367595    -3.74   0.000     -.779435   -.2433475
+index_attributes |   -.169655   .0455054    -3.73   0.000     -.258844    -.080466
+   asylum_abroad |   -.319294   .1277021    -2.50   0.012    -.5695855   -.0690025
+      left_voter |   .0589232   .1328337     0.44   0.657    -.2014261    .3192726
+     right_voter |  -.5287717    .226772    -2.33   0.020    -.9732366   -.0843067
+        no_voter |  -.3684655   .1826621    -2.02   0.044    -.7264767   -.0104543
+           _cons |   1.555466   .4118071     3.78   0.000     .7483393    2.362594
+----------------------------------------------------------------------------------
+
+. testparm $socio_economic
+
+ ( 1)  [h_acc]female = 0
+ ( 2)  [h_acc]single = 0
+ ( 3)  [h_acc]age = 0
+ ( 4)  [h_acc]religion = 0
+ ( 5)  [h_acc]diff_friends = 0
+ ( 6)  [h_acc]index_surr = 0
+
+           chi2(  6) =    2.96
+         Prob > chi2 =    0.8145
+
+. local F1 = r(p)
+
+. testparm $impacts
+
+ ( 1)  [h_acc]steal_jobs = 0
+ ( 2)  [h_acc]increase_crime = 0
+ ( 3)  [h_acc]tax_burden = 0
+ ( 4)  [h_acc]index_attributes = 0
+ ( 5)  [h_acc]asylum_abroad = 0
+
+           chi2(  5) =   57.07
+         Prob > chi2 =    0.0000
+
+. local F2 = r(p)
+
+. testparm $polit
+
+ ( 1)  [h_acc]left_voter = 0
+ ( 2)  [h_acc]right_voter = 0
+ ( 3)  [h_acc]no_voter = 0
+
+           chi2(  3) =   10.20
+         Prob > chi2 =    0.0170
+
+. local F3 = r(p)
+
+. local R2= e(r2_p)
+
+. margins, dydx(*) post
+
+Average marginal effects                        Number of obs     =        686
+Model VCE    : Robust
+
+Expression   : Pr(h_acc), predict()
+dy/dx w.r.t. : t_2 t_3 t_4 female single age religion diff_friends index_surr steal_jobs increase_crime tax_burden index_attributes asylum_abroad
+               left_voter right_voter no_voter
+
+----------------------------------------------------------------------------------
+                 |            Delta-method
+                 |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-----------------+----------------------------------------------------------------
+             t_2 |   .0068926   .0472466     0.15   0.884    -.0857089    .0994942
+             t_3 |   -.092238   .0467526    -1.97   0.049    -.1838714   -.0006047
+             t_4 |  -.2997769   .0515769    -5.81   0.000    -.4008658   -.1986881
+          female |  -.0047556   .0330454    -0.14   0.886    -.0695233    .0600121
+          single |  -.0146971   .0315045    -0.47   0.641    -.0764447    .0470505
+             age |   .0011487   .0024744     0.46   0.642    -.0037011    .0059985
+        religion |   .0384415   .0336541     1.14   0.253    -.0275194    .1044023
+    diff_friends |   .0212611   .0446958     0.48   0.634    -.0663409    .1088632
+      index_surr |  -.0196855   .0238284    -0.83   0.409    -.0663883    .0270174
+      steal_jobs |  -.1627115   .0703318    -2.31   0.021    -.3005593   -.0248638
+  increase_crime |   .0014249   .0347638     0.04   0.967     -.066711    .0695608
+      tax_burden |  -.1411419   .0365878    -3.86   0.000    -.2128526   -.0694312
+index_attributes |  -.0468241   .0122496    -3.82   0.000    -.0708328   -.0228154
+   asylum_abroad |  -.0881238   .0349188    -2.52   0.012    -.1565635   -.0196842
+      left_voter |   .0162626   .0366548     0.44   0.657    -.0555795    .0881047
+     right_voter |  -.1459388   .0621481    -2.35   0.019    -.2677469   -.0241308
+        no_voter |   -.101695   .0500536    -2.03   0.042    -.1997983   -.0035917
+----------------------------------------------------------------------------------
+
+. outreg2 using "$working_ANALYSIS/results/tables/TableS4", addstat("Pseudo R-squared", `R2', "F-Test: Socio-demographics", `F1', "F-Test: Attitudes",
+>  `F2', "F-Test: Party preferences", `F3') adec(2) dec(2) word append
+C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/tables/TableS4.rtf
+dir : seeout
+
+. 
+end of do-file
+
+. shellout using `"C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/tables/TableS4.rtf"'
+
+. do "C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC\run.do"
+
+. *-------------------------------------------------------------------------------------------------------
+. * OVERVIEW
+. *-------------------------------------------------------------------------------------------------------
+. *   This script generates tables and figures reported in the manuscript and SOM of the paper:
+. *   "(Climate) Migrants welcome? Evidence from a Survey-Experiment in Austria "
+. *       Author: Ivo Steimanis, Philipps University Marburg
+. *   All experimental data are stored in /data
+. *   All figures reported in the main manuscript and SOM are outputted to /results/figures
+. *   All tables areported in the main manuscript and SOM are outputted to /results/tables
+. * TO PERFORM A CLEAN RUN, DELETE THE FOLLOWING TWO FOLDERS:
+. *   /processed
+. *   /results
+. *-------------------------------------------------------------------------------------------------------
+. 
+. 
+. *--------------------------------------------------
+. * Set global Working Directory
+. *--------------------------------------------------
+. * Define this global macro to point where the replication folder is saved locally that includes this run.do script
+. global working_ANALYSIS "C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC"
+
+. 
+. 
+. *--------------------------------------------------
+. * Program Setup
+. *--------------------------------------------------
+. * Initialize log and record system parameters
+. clear
+
+. set more off
+
+. cap mkdir "$working_ANALYSIS/scripts/logs"
+
+. cap log close

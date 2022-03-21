@@ -1,0 +1,3237 @@
+------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/logs/2022.03.21-12.18.42.log.
+> txt
+  log type:  text
+ opened on:  21 Mar 2022, 12:18:42
+
+. 
+. di "Begin date and time: $S_DATE $S_TIME"
+Begin date and time: 21 Mar 2022 12:18:42
+
+. di "Stata version: `c(stata_version)'"
+Stata version: 16.1
+
+. di "Updated as of: `c(born_date)'"
+Updated as of: 19 Nov 2020
+
+. di "Variant:       `=cond( c(MP),"MP",cond(c(SE),"SE",c(flavor)) )'"
+Variant:       MP
+
+. di "Processors:    `c(processors)'"
+Processors:    2
+
+. di "OS:            `c(os)' `c(osdtl)'"
+OS:            Windows 64-bit
+
+. di "Machine type:  `c(machine_type)'"
+Machine type:  PC (64-bit x86-64)
+
+. 
+. *   Analyses were run on Windows using Stata version 16
+. version 16              // Set Version number for backward compatibility
+
+. 
+. * All required Stata packages are available in the /libraries/stata folder
+. tokenize `"$S_ADO"', parse(";")
+
+. while `"`1'"' != "" {
+  2.   if `"`1'"'!="BASE" cap adopath - `"`1'"'
+  3.   macro shift
+  4. }
+
+. adopath ++ "$working_ANALYSIS/scripts/libraries/stata"
+  [1]              "C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata"
+  [2]  (BASE)      "C:\Program Files\Stata16\ado\base/"
+
+. mata: mata mlib index
+.mlib libraries to be searched are now
+    lmatabase;lmataado;lmataerm;lmatafc;lmatagsem;lmatalasso;lmatamcmc;lmatameta;lmatami;lmatamixlog;lmatanumlib;lmataopt;lmatapath;lmatapostest;lmata
+> pss;lmatasem;lmatasp;lmatasvy;lmatatab;lcolrspace
+
+. sysdir set PERSONAL "$working_ANALYSIS/scripts/libraries/stata"
+
+. 
+. * Create directories for output files
+. cap mkdir "$working_ANALYSIS/processed"
+
+. cap mkdir "$working_ANALYSIS/results"
+
+. cap mkdir "$working_ANALYSIS/results/intermediate"
+
+. cap mkdir "$working_ANALYSIS/results/tables"
+
+. cap mkdir "$working_ANALYSIS/results/figures"
+
+. * -------------------------------------------------
+. 
+. * Set general graph style
+. set scheme swift_red //select one scheme as reference scheme to work with
+scheme swift_red not found
+r(111);
+
+end of do-file
+
+r(111);
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. *--------------------------------------------------
+. * This script installs all necessary Stata packages into /libraries/stata
+. * To do a fresh install of all Stata packages, delete the entire /libraries/stata folder
+. * Note: this script has been provided for pedagogical purposes only. It should NOT be included as part of your replication materials, since these ad
+> d-ons are already available in /libraries/stata
+. *--------------------------------------------------
+. 
+. *******
+. 
+. * Create and define a local installation directory for the packages
+. cap mkdir "$working_ANALYSIS/scripts/libraries"
+
+. cap mkdir "$working_ANALYSIS/scripts/libraries/stata"
+
+. net set ado "$working_ANALYSIS/scripts/libraries/stata"
+
+. 
+. 
+. * install grc1leg - combine graphs into one graph with a common legend
+. net install grc1leg, from("http://www.stata.com/users/vwiggins") replace
+checking grc1leg consistency and verifying not already installed...
+installing into C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata\...
+installation complete.
+
+. 
+. 
+. * install package directly from Github
+. net install ietoolkit , from("https://raw.githubusercontent.com/worldbank/ietoolkit/master/src") replace
+checking ietoolkit consistency and verifying not already installed...
+installing into C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata\...
+installation complete.
+
+. net install palettes, replace from("https://raw.githubusercontent.com/benjann/palettes/master/")
+checking palettes consistency and verifying not already installed...
+all files already exist and are up to date.
+
+. net install colrspace, replace from("https://raw.githubusercontent.com/benjann/colrspace/master/")
+checking colrspace consistency and verifying not already installed...
+all files already exist and are up to date.
+
+. 
+. * Install packages from SSC
+. foreach p in catplot cibar coefplot distplot estout geo2xy grstyle mif2dta moss mylabels outreg2 schemepack shp2dta spmap {
+  2.         local ltr = substr(`"`p'"',1,1)
+  3.         qui net from "http://fmwww.bc.edu/repec/bocode/`ltr'"
+  4.         net install `p', replace
+  5. }
+checking catplot consistency and verifying not already installed...
+installing into C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata\...
+installation complete.
+checking cibar consistency and verifying not already installed...
+installing into C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata\...
+installation complete.
+checking coefplot consistency and verifying not already installed...
+installing into C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata\...
+installation complete.
+checking distplot consistency and verifying not already installed...
+installing into C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata\...
+installation complete.
+checking estout consistency and verifying not already installed...
+installing into C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata\...
+installation complete.
+checking geo2xy consistency and verifying not already installed...
+installing into C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata\...
+installation complete.
+checking grstyle consistency and verifying not already installed...
+all files already exist and are up to date.
+checking mif2dta consistency and verifying not already installed...
+installing into C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata\...
+installation complete.
+checking moss consistency and verifying not already installed...
+installing into C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata\...
+installation complete.
+checking mylabels consistency and verifying not already installed...
+installing into C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata\...
+installation complete.
+checking outreg2 consistency and verifying not already installed...
+installing into C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata\...
+installation complete.
+checking schemepack consistency and verifying not already installed...
+could not copy http://fmwww.bc.edu/repec/bocode/s/scheme-white_hue.scheme
+(no action taken)
+--Break--
+r(1);
+
+end of do-file
+
+--Break--
+r(1);
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. *--------------------------------------------------
+. * This script installs all necessary Stata packages into /libraries/stata
+. * To do a fresh install of all Stata packages, delete the entire /libraries/stata folder
+. * Note: this script has been provided for pedagogical purposes only. It should NOT be included as part of your replication materials, since these ad
+> d-ons are already available in /libraries/stata
+. *--------------------------------------------------
+. 
+. *******
+. 
+. * Create and define a local installation directory for the packages
+. cap mkdir "$working_ANALYSIS/scripts/libraries"
+
+. cap mkdir "$working_ANALYSIS/scripts/libraries/stata"
+
+. net set ado "$working_ANALYSIS/scripts/libraries/stata"
+
+. 
+. 
+. * install grc1leg - combine graphs into one graph with a common legend
+. net install grc1leg, from("http://www.stata.com/users/vwiggins") replace
+checking grc1leg consistency and verifying not already installed...
+installing into C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata\...
+installation complete.
+
+. 
+. 
+. * install package directly from Github
+. net install ietoolkit , from("https://raw.githubusercontent.com/worldbank/ietoolkit/master/src") replace
+checking ietoolkit consistency and verifying not already installed...
+installing into C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata\...
+installation complete.
+
+. net install palettes, replace from("https://raw.githubusercontent.com/benjann/palettes/master/")
+checking palettes consistency and verifying not already installed...
+installing into C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata\...
+installation complete.
+
+. net install colrspace, replace from("https://raw.githubusercontent.com/benjann/colrspace/master/")
+checking colrspace consistency and verifying not already installed...
+installing into C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata\...
+installation complete.
+
+. 
+. * Install packages from SSC
+. foreach p in catplot cibar coefplot estout grstyle  mylabels outreg2 schemepack  {
+  2.         local ltr = substr(`"`p'"',1,1)
+  3.         qui net from "http://fmwww.bc.edu/repec/bocode/`ltr'"
+  4.         net install `p', replace
+  5. }
+checking catplot consistency and verifying not already installed...
+installing into C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata\...
+installation complete.
+checking cibar consistency and verifying not already installed...
+installing into C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata\...
+installation complete.
+checking coefplot consistency and verifying not already installed...
+installing into C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata\...
+installation complete.
+checking estout consistency and verifying not already installed...
+installing into C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata\...
+installation complete.
+checking grstyle consistency and verifying not already installed...
+installing into C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata\...
+installation complete.
+checking mylabels consistency and verifying not already installed...
+installing into C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata\...
+installation complete.
+checking outreg2 consistency and verifying not already installed...
+installing into C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata\...
+installation complete.
+checking schemepack consistency and verifying not already installed...
+installing into C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/scripts/libraries/stata\...
+installation complete.
+
+. 
+. 
+. ** EOF
+. 
+. 
+. 
+end of do-file
+
+. do "C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC\scripts\01_clean_data.do"
+
+. *--------------------------------------------------------------------------
+. * SCRIPT: 1_clean_data.do
+. * PURPOSE: cleans the  experimental data and generates additional variables
+. *--------------------------------------------------------------------------
+. 
+. 
+. 
+. 
+. 
+. *--------------------------------------------------
+. * PREPERATION DATASET STUDY 1: Philippines
+. *--------------------------------------------------
+. 
+. /*
+> 1)Import all sheets from excel files and merge into one *.dta file
+> 2)Cleaning dataset
+> 3)Generate important variables
+> */
+. 
+. *** Directory IVO ****
+. global workpath "C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Stata Migration survey experiment\DO-FILES"
+
+. global datapath "C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Stata Migration survey experiment\DTA-FILES"
+
+. global output "C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Stata Migration survey experiment\OUTPUT"
+
+. global xlspath "C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Stata Migration survey experiment\XLS-FILES"
+
+. 
+. 
+. *** xls2dta ***
+. 
+. xls2dta, save("$datapath", replace): import excel using "$xlspath\survey_experiment_complete.xlsx" , firstrow 
+command xls2dta is unrecognized
+r(199);
+
+end of do-file
+
+r(199);
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. *--------------------------------------------------------------------------
+. * SCRIPT: 1_clean_data.do
+. * PURPOSE: cleans the  experimental data and generates additional variables
+. *--------------------------------------------------------------------------
+. *Import excel dataset
+. import excel using "$working_ANALYSIS/data/survey_experiment_complete.xlsx" , firstrow 
+file C:/Users/istei/OneDrive/Promotion/1_Projects/Migration survey experiment/Submission/replication_REC/data/survey_experiment_complete.xlsx not foun
+> d
+r(601);
+
+end of do-file
+
+r(601);
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. *--------------------------------------------------------------------------
+. * SCRIPT: 1_clean_data.do
+. * PURPOSE: cleans the  experimental data and generates additional variables
+. *--------------------------------------------------------------------------
+. *Import excel dataset
+. import excel using "$working_ANALYSIS/data/survey_experiment_migration.xlsx" , firstrow 
+file C:/Users/istei/OneDrive/Promotion/1_Projects/Migration survey experiment/Submission/replication_REC/data/survey_experiment_migration.xlsx not fou
+> nd
+r(601);
+
+end of do-file
+
+r(601);
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. *--------------------------------------------------------------------------
+. * SCRIPT: 1_clean_data.do
+. * PURPOSE: cleans the  experimental data and generates additional variables
+. *--------------------------------------------------------------------------
+. *Import excel dataset
+. import excel using "$working_ANALYSIS/data/migration_survey_experiment.xlsx" , firstrow 
+(40 vars, 1,197 obs)
+
+. 
+. 
+end of do-file
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. *--------------------------------------------------------------------------
+. * SCRIPT: 1_clean_data.do
+. * PURPOSE: cleans the  experimental data and generates additional variables
+. *--------------------------------------------------------------------------
+. *Import excel dataset
+. import excel using "$working_ANALYSIS/data/migration_survey_experiment.xlsx" , firstrow 
+no; data in memory would be lost
+r(4);
+
+end of do-file
+
+r(4);
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. *--------------------------------------------------------------------------
+. * SCRIPT: 1_clean_data.do
+. * PURPOSE: cleans the  experimental data and generates additional variables
+. *--------------------------------------------------------------------------
+. *Import excel dataset
+. import excel using "$working_ANALYSIS/data/migration_survey_experiment.xlsx" , firstrow replace
+option replace not allowed
+r(198);
+
+end of do-file
+
+r(198);
+
+. help import
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. *--------------------------------------------------------------------------
+. * SCRIPT: 1_clean_data.do
+. * PURPOSE: cleans the  experimental data and generates additional variables
+. *--------------------------------------------------------------------------
+. *Import excel dataset
+. import excel using "$working_ANALYSIS/data/migration_survey_experiment.xlsx" , firstrow clear
+(40 vars, 1,197 obs)
+
+. 
+. 
+. 
+. *--------------------------------------------------------------------------
+. * Cleaing & Labelling
+. *--------------------------------------------------------------------------
+. drop ecoacceptance envccacceptance polacceptance  envnccacceptance
+
+. 
+. label var acceptance "Would you agree that this person can legally migrate to Austria?"
+
+. label define one_eight 1 "1 'completely against'" 2 "2 'strongly against'" 3 "3 'against'" 4 "4 'rather against'" 5 "5 'rather support'" 6 "6 'suppo
+> rt'" 7 "7 'strongly support'" 8 "8 'completely support'",replace
+
+. label values acceptance one_eight
+
+. 
+. label var wtp "Willingness to pay in order that 10% more migrants can move to Austria"
+
+. 
+. label var wta "Willingness to accept 10% more migrants in Austria"
+
+. 
+. label var sure "How sure are you about the amount you stated for wtp/wta?"
+
+. 
+. label define yes_no 0 "no" 1 "yes"
+
+. 
+. rename reffamily unify_fam
+
+. label var unify_fam "Would you support migration of his family, once he found a job?"
+
+. label values unify_fam one_eight
+
+. 
+. rename topic interest
+
+. label var interest "Interest in migration topic"
+
+. label define interest1 0 "not interested at all" 1 "somewhat interested" 2 "very interested", replace
+
+. label values interest interest1
+
+. 
+. 
+. rename conflictcause legit_conflict
+
+. label var legit_conflict "Is conflict a legitimate reason for asylum (Geneva Convention)?"
+
+. label values  legit_conflict yes_no
+
+. 
+. rename ecocause legit_eco
+
+. label var legit_eco "Are economic problems a legitimate reason for asylum (Geneva Convention)?"
+
+. label values  legit_eco yes_no
+
+. 
+. rename envcause legit_env
+
+. label var legit_env "Is environmental degration a legitimate reason for asylum (Geneva Convention)?"
+
+. label values  legit_env yes_no
+
+. 
+. 
+. foreach var of varlist factor_* {
+  2.         label var `var' "Important factors for migrants if they want to live in Austria."
+  3.         label values `var' yes_no
+  4.         }
+
+. 
+. rename work_shortage help_economy
+
+. label var help_economy "Do immigrants take jobs from Austrians?"
+
+. label define steal1 2 "They help the economy" 1 "They steal jobs" 0 "Don't know", replace
+
+. label values help_economy steal1
+
+. 
+. rename give_take immigrants_costly
+
+. label var immigrants_costly "Do immigrants cost the welfare state more than they give?"
+
+. label define costly1 1 "cost more" 2 "contribute more" 0 "Don't know", replace
+
+. label values immigrants_costly costly1
+
+. 
+. label var crime_rate "Scale on crime rate changes due to migration from increases strongly to reduces strongly"
+note: label truncated to 80 characters
+
+. label define crime1 4 "strong increase" 3 "increase slightly" 2 "same" 1 "decrease slightly" 0 "decrease strongly",replace
+
+. label values crime_rate crime1
+
+. 
+. rename appeals_eu pleas_abroad
+
+. label var pleas_abroad "Asylum pleas should be already done abroad, outside the EU."
+
+. label define agree_scale 4 "agree" 3 "agree slightly" 2 "don't care" 1 "disagree slightly" 0 "disagree",replace
+
+. label values pleas_abroad agree_scale
+
+. 
+. label define surr_scale 0 "very low" 1 "low" 2 "moderate" 3 "high" 4 "very high", replace
+
+. label var surr_foreigner "Share of foreigners in neighborhood on a scale from very high to very low"
+
+. label values surr_foreigner surr_scale
+
+. label var surr_crime "Crimes in neighborhood on a scale from very high to very low"
+
+. label values surr_crime surr_scale
+
+. label var surr_poverty "Poverty rate in neighborhood on a scale from very high to very low"
+
+. label values surr_poverty surr_scale
+
+. 
+. label var norms_values "All people in a country should share the same norms and values"
+
+. label values norms_values agree_scale
+
+. 
+. rename clique foreign_friends
+
+. label var foreign_friends "Do you have friends of different ethnicitiy, religion, etc.?"
+
+. label define foreign1 0 "none"  1 "a few" 2 "many", replace
+
+. label values foreign_friends foreign1
+
+. 
+. 
+. label var party "Which political party would you vote for?"
+
+. replace party=5 if party==6
+(279 real changes made)
+
+. replace party=6 if party==7
+(6 real changes made)
+
+. replace party=7 if party==8
+(61 real changes made)
+
+. replace party=8 if party==9
+(12 real changes made)
+
+. replace party=9 if party==10
+(19 real changes made)
+
+. replace party=10 if party==11
+(84 real changes made)
+
+. label define party1 1 "SPÖ" 2 "ÖVP" 3 "FPÖ" 4 "BZÖ" 5 "Die Grünen" 6 "Team Stronach" 7 "NEOs" 8 "KPÖ" 9 "Piratenpartei" 10 "Other"
+
+. label values party party1
+
+. 
+. label var religion "Are you part of a religious community?"
+
+. label values religion yes_no
+
+. 
+. label var mess "How often do you go to prayer?"
+
+. label define mess1      3 "frequently" 2 "sometimes" 1 "rarely" 0 "never", replace
+
+. label values mess mess1
+
+. 
+. label var marital "Marital status"
+
+. label define marital1 1 "single" 2 "in a relationship" 3 "married", replace
+
+. label values marital marital1
+
+. 
+. rename gender female
+
+. replace female=0 if female==1
+(260 real changes made)
+
+. replace female=1 if female==2
+(426 real changes made)
+
+. label var female "Respondents gender, 1 if female"
+
+. label define gender 0 "male" 1 "female"
+
+. label values female gender
+
+. 
+. label var age "Respondents age in years"
+
+. 
+. label var study "Subject respondent studies"
+
+. 
+. label var origin "Country where participant is from."
+
+. 
+. 
+. /*
+> #############################
+> GENERATE important variables
+> #############################
+> */
+. 
+. *treatment identifier
+. 
+. gen treatment=1 if randnumber==2
+(995 missing values generated)
+
+. replace treatment=4 if randnumber==1
+(197 real changes made)
+
+. replace treatment=2 if randnumber==3 | randnumber==4
+(423 real changes made)
+
+. replace treatment=3 if randnumber==5 | randnumber==6
+(375 real changes made)
+
+. lab def t_lab 1 "CONFLICT" 4 "ECON" 2 "ENV GLOBAL" 3 "ENV LOCAL"
+
+. label var treatment "Treatment"
+
+. lab val treatment t_lab
+
+. 
+. tabulate treatment, gen(t_)
+
+  Treatment |      Freq.     Percent        Cum.
+------------+-----------------------------------
+   CONFLICT |        202       16.88       16.88
+ ENV GLOBAL |        423       35.34       52.21
+  ENV LOCAL |        375       31.33       83.54
+       ECON |        197       16.46      100.00
+------------+-----------------------------------
+      Total |      1,197      100.00
+
+. 
+. // Treatment dummies
+. gen econ = 0 
+
+. replace econ = 1 if treatment==1
+(202 real changes made)
+
+. label variable eco "Treatment economic reason for migration"
+
+. 
+. gen pol = 0 
+
+. replace pol = 1 if treatment==2
+(423 real changes made)
+
+. label variable pol "Treatment  political reason for miration"
+
+. 
+. gen env_cc = 0 
+
+. replace env_cc = 1 if treatment==3
+(375 real changes made)
+
+. label variable env_cc "Treatment environmental reason due to CC for migration"
+
+. 
+. gen env_self = 0 
+
+. replace env_self = 1 if treatment==4
+(197 real changes made)
+
+. label variable env_self "Treatment environmental reason self-imposed for migration"
+
+. 
+. 
+. *treatment interactions 
+. gen t2_right = t_2*right_voter
+right_voter not found
+r(111);
+
+end of do-file
+
+r(111);
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. *--------------------------------------------------------------------------
+. * SCRIPT: 1_clean_data.do
+. * PURPOSE: cleans the  experimental data and generates additional variables
+. *--------------------------------------------------------------------------
+. *Import excel dataset
+. import excel using "$working_ANALYSIS/data/migration_survey_experiment.xlsx" , firstrow clear
+(40 vars, 1,197 obs)
+
+. 
+. 
+. 
+. *--------------------------------------------------------------------------
+. * Cleaing & Labelling
+. *--------------------------------------------------------------------------
+. drop ecoacceptance envccacceptance polacceptance  envnccacceptance
+
+. 
+. label var acceptance "Would you agree that this person can legally migrate to Austria?"
+
+. label define one_eight 1 "1 'completely against'" 2 "2 'strongly against'" 3 "3 'against'" 4 "4 'rather against'" 5 "5 'rather support'" 6 "6 'suppo
+> rt'" 7 "7 'strongly support'" 8 "8 'completely support'",replace
+
+. label values acceptance one_eight
+
+. 
+. label var wtp "Willingness to pay in order that 10% more migrants can move to Austria"
+
+. 
+. label var wta "Willingness to accept 10% more migrants in Austria"
+
+. 
+. label var sure "How sure are you about the amount you stated for wtp/wta?"
+
+. 
+. label define yes_no 0 "no" 1 "yes"
+
+. 
+. rename reffamily unify_fam
+
+. label var unify_fam "Would you support migration of his family, once he found a job?"
+
+. label values unify_fam one_eight
+
+. 
+. rename topic interest
+
+. label var interest "Interest in migration topic"
+
+. label define interest1 0 "not interested at all" 1 "somewhat interested" 2 "very interested", replace
+
+. label values interest interest1
+
+. 
+. 
+. rename conflictcause legit_conflict
+
+. label var legit_conflict "Is conflict a legitimate reason for asylum (Geneva Convention)?"
+
+. label values  legit_conflict yes_no
+
+. 
+. rename ecocause legit_eco
+
+. label var legit_eco "Are economic problems a legitimate reason for asylum (Geneva Convention)?"
+
+. label values  legit_eco yes_no
+
+. 
+. rename envcause legit_env
+
+. label var legit_env "Is environmental degration a legitimate reason for asylum (Geneva Convention)?"
+
+. label values  legit_env yes_no
+
+. 
+. 
+. foreach var of varlist factor_* {
+  2.         label var `var' "Important factors for migrants if they want to live in Austria."
+  3.         label values `var' yes_no
+  4.         }
+
+. 
+. rename work_shortage help_economy
+
+. label var help_economy "Do immigrants take jobs from Austrians?"
+
+. label define steal1 2 "They help the economy" 1 "They steal jobs" 0 "Don't know", replace
+
+. label values help_economy steal1
+
+. 
+. rename give_take immigrants_costly
+
+. label var immigrants_costly "Do immigrants cost the welfare state more than they give?"
+
+. label define costly1 1 "cost more" 2 "contribute more" 0 "Don't know", replace
+
+. label values immigrants_costly costly1
+
+. 
+. label var crime_rate "Scale on crime rate changes due to migration from increases strongly to reduces strongly"
+note: label truncated to 80 characters
+
+. label define crime1 4 "strong increase" 3 "increase slightly" 2 "same" 1 "decrease slightly" 0 "decrease strongly",replace
+
+. label values crime_rate crime1
+
+. 
+. rename appeals_eu pleas_abroad
+
+. label var pleas_abroad "Asylum pleas should be already done abroad, outside the EU."
+
+. label define agree_scale 4 "agree" 3 "agree slightly" 2 "don't care" 1 "disagree slightly" 0 "disagree",replace
+
+. label values pleas_abroad agree_scale
+
+. 
+. label define surr_scale 0 "very low" 1 "low" 2 "moderate" 3 "high" 4 "very high", replace
+
+. label var surr_foreigner "Share of foreigners in neighborhood on a scale from very high to very low"
+
+. label values surr_foreigner surr_scale
+
+. label var surr_crime "Crimes in neighborhood on a scale from very high to very low"
+
+. label values surr_crime surr_scale
+
+. label var surr_poverty "Poverty rate in neighborhood on a scale from very high to very low"
+
+. label values surr_poverty surr_scale
+
+. 
+. label var norms_values "All people in a country should share the same norms and values"
+
+. label values norms_values agree_scale
+
+. 
+. rename clique foreign_friends
+
+. label var foreign_friends "Do you have friends of different ethnicitiy, religion, etc.?"
+
+. label define foreign1 0 "none"  1 "a few" 2 "many", replace
+
+. label values foreign_friends foreign1
+
+. 
+. 
+. label var party "Which political party would you vote for?"
+
+. replace party=5 if party==6
+(279 real changes made)
+
+. replace party=6 if party==7
+(6 real changes made)
+
+. replace party=7 if party==8
+(61 real changes made)
+
+. replace party=8 if party==9
+(12 real changes made)
+
+. replace party=9 if party==10
+(19 real changes made)
+
+. replace party=10 if party==11
+(84 real changes made)
+
+. label define party1 1 "SPÖ" 2 "ÖVP" 3 "FPÖ" 4 "BZÖ" 5 "Die Grünen" 6 "Team Stronach" 7 "NEOs" 8 "KPÖ" 9 "Piratenpartei" 10 "Other"
+
+. label values party party1
+
+. 
+. label var religion "Are you part of a religious community?"
+
+. label values religion yes_no
+
+. 
+. label var mess "How often do you go to prayer?"
+
+. label define mess1      3 "frequently" 2 "sometimes" 1 "rarely" 0 "never", replace
+
+. label values mess mess1
+
+. 
+. label var marital "Marital status"
+
+. label define marital1 1 "single" 2 "in a relationship" 3 "married", replace
+
+. label values marital marital1
+
+. 
+. rename gender female
+
+. replace female=0 if female==1
+(260 real changes made)
+
+. replace female=1 if female==2
+(426 real changes made)
+
+. label var female "Respondents gender, 1 if female"
+
+. label define gender 0 "male" 1 "female"
+
+. label values female gender
+
+. 
+. label var age "Respondents age in years"
+
+. 
+. label var study "Subject respondent studies"
+
+. 
+. label var origin "Country where participant is from."
+
+. 
+. 
+. /*
+> #############################
+> GENERATE important variables
+> #############################
+> */
+. 
+. *treatment identifier
+. 
+. gen treatment=1 if randnumber==2
+(995 missing values generated)
+
+. replace treatment=4 if randnumber==1
+(197 real changes made)
+
+. replace treatment=2 if randnumber==3 | randnumber==4
+(423 real changes made)
+
+. replace treatment=3 if randnumber==5 | randnumber==6
+(375 real changes made)
+
+. lab def t_lab 1 "CONFLICT" 4 "ECON" 2 "ENV GLOBAL" 3 "ENV LOCAL"
+
+. label var treatment "Treatment"
+
+. lab val treatment t_lab
+
+. 
+. tabulate treatment, gen(t_)
+
+  Treatment |      Freq.     Percent        Cum.
+------------+-----------------------------------
+   CONFLICT |        202       16.88       16.88
+ ENV GLOBAL |        423       35.34       52.21
+  ENV LOCAL |        375       31.33       83.54
+       ECON |        197       16.46      100.00
+------------+-----------------------------------
+      Total |      1,197      100.00
+
+. 
+. // Treatment dummies
+. gen econ = 0 
+
+. replace econ = 1 if treatment==1
+(202 real changes made)
+
+. label variable eco "Treatment economic reason for migration"
+
+. 
+. gen pol = 0 
+
+. replace pol = 1 if treatment==2
+(423 real changes made)
+
+. label variable pol "Treatment  political reason for miration"
+
+. 
+. gen env_cc = 0 
+
+. replace env_cc = 1 if treatment==3
+(375 real changes made)
+
+. label variable env_cc "Treatment environmental reason due to CC for migration"
+
+. 
+. gen env_self = 0 
+
+. replace env_self = 1 if treatment==4
+(197 real changes made)
+
+. label variable env_self "Treatment environmental reason self-imposed for migration"
+
+. 
+. 
+. // Polarization in acceptance levels
+. gen imm_opinion=.
+(1,197 missing values generated)
+
+. replace imm_opinion=1 if acceptance < 4
+(101 real changes made)
+
+. replace imm_opinion=2 if acceptance==4 
+(122 real changes made)
+
+. replace imm_opinion=3 if acceptance==5
+(181 real changes made)
+
+. replace imm_opinion=4 if acceptance > 5
+(793 real changes made)
+
+. 
+. lab def str_opinion 1 "<4 'against' " 2 "4='rather against'" 3 "5='rather support'" 4 ">5 'support' ", replace
+
+. lab val imm_opinion str_opinion
+
+. tab imm_opinion
+
+       imm_opinion |      Freq.     Percent        Cum.
+-------------------+-----------------------------------
+     <4 'against'  |        101        8.44        8.44
+4='rather against' |        122       10.19       18.63
+5='rather support' |        181       15.12       33.75
+     >5 'support'  |        793       66.25      100.00
+-------------------+-----------------------------------
+             Total |      1,197      100.00
+
+. 
+. lab var acceptance "Acceptance Level"
+
+. 
+. *binary acceptance
+. generate h_acc=0 if acceptance < 5
+(974 missing values generated)
+
+. replace h_acc=1 if acceptance >=5
+(974 real changes made)
+
+. replace h_acc=. if incomplete==1
+incomplete not found
+r(111);
+
+end of do-file
+
+r(111);
+
+. do "C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC\scripts\01_clean_data.do"
+
+. *--------------------------------------------------------------------------
+. * SCRIPT: 1_clean_data.do
+. * PURPOSE: cleans the  experimental data and generates additional variables
+. *--------------------------------------------------------------------------
+. *Import excel dataset
+. import excel using "$working_ANALYSIS/data/migration_survey_experiment.xlsx" , firstrow clear
+(40 vars, 1,197 obs)
+
+. 
+. 
+. 
+. *--------------------------------------------------------------------------
+. * Cleaing & Labelling
+. *--------------------------------------------------------------------------
+. drop ecoacceptance envccacceptance polacceptance  envnccacceptance
+
+. 
+. label var acceptance "Would you agree that this person can legally migrate to Austria?"
+
+. label define one_eight 1 "1 'completely against'" 2 "2 'strongly against'" 3 "3 'against'" 4 "4 'rather against'" 5 "5 'rather support'" 6 "6 'suppo
+> rt'" 7 "7 'strongly support'" 8 "8 'completely support'",replace
+
+. label values acceptance one_eight
+
+. 
+. label var wtp "Willingness to pay in order that 10% more migrants can move to Austria"
+
+. 
+. label var wta "Willingness to accept 10% more migrants in Austria"
+
+. 
+. label var sure "How sure are you about the amount you stated for wtp/wta?"
+
+. 
+. label define yes_no 0 "no" 1 "yes"
+
+. 
+. rename reffamily unify_fam
+
+. label var unify_fam "Would you support migration of his family, once he found a job?"
+
+. label values unify_fam one_eight
+
+. 
+. rename topic interest
+
+. label var interest "Interest in migration topic"
+
+. label define interest1 0 "not interested at all" 1 "somewhat interested" 2 "very interested", replace
+
+. label values interest interest1
+
+. 
+. 
+. rename conflictcause legit_conflict
+
+. label var legit_conflict "Is conflict a legitimate reason for asylum (Geneva Convention)?"
+
+. label values  legit_conflict yes_no
+
+. 
+. rename ecocause legit_eco
+
+. label var legit_eco "Are economic problems a legitimate reason for asylum (Geneva Convention)?"
+
+. label values  legit_eco yes_no
+
+. 
+. rename envcause legit_env
+
+. label var legit_env "Is environmental degration a legitimate reason for asylum (Geneva Convention)?"
+
+. label values  legit_env yes_no
+
+. 
+. 
+. foreach var of varlist factor_* {
+  2.         label var `var' "Important factors for migrants if they want to live in Austria."
+  3.         label values `var' yes_no
+  4.         }
+
+. 
+. rename work_shortage help_economy
+
+. label var help_economy "Do immigrants take jobs from Austrians?"
+
+. label define steal1 2 "They help the economy" 1 "They steal jobs" 0 "Don't know", replace
+
+. label values help_economy steal1
+
+. 
+. rename give_take immigrants_costly
+
+. label var immigrants_costly "Do immigrants cost the welfare state more than they give?"
+
+. label define costly1 1 "cost more" 2 "contribute more" 0 "Don't know", replace
+
+. label values immigrants_costly costly1
+
+. 
+. label var crime_rate "Scale on crime rate changes due to migration from increases strongly to reduces strongly"
+note: label truncated to 80 characters
+
+. label define crime1 4 "strong increase" 3 "increase slightly" 2 "same" 1 "decrease slightly" 0 "decrease strongly",replace
+
+. label values crime_rate crime1
+
+. 
+. rename appeals_eu pleas_abroad
+
+. label var pleas_abroad "Asylum pleas should be already done abroad, outside the EU."
+
+. label define agree_scale 4 "agree" 3 "agree slightly" 2 "don't care" 1 "disagree slightly" 0 "disagree",replace
+
+. label values pleas_abroad agree_scale
+
+. 
+. label define surr_scale 0 "very low" 1 "low" 2 "moderate" 3 "high" 4 "very high", replace
+
+. label var surr_foreigner "Share of foreigners in neighborhood on a scale from very high to very low"
+
+. label values surr_foreigner surr_scale
+
+. label var surr_crime "Crimes in neighborhood on a scale from very high to very low"
+
+. label values surr_crime surr_scale
+
+. label var surr_poverty "Poverty rate in neighborhood on a scale from very high to very low"
+
+. label values surr_poverty surr_scale
+
+. 
+. label var norms_values "All people in a country should share the same norms and values"
+
+. label values norms_values agree_scale
+
+. 
+. rename clique foreign_friends
+
+. label var foreign_friends "Do you have friends of different ethnicitiy, religion, etc.?"
+
+. label define foreign1 0 "none"  1 "a few" 2 "many", replace
+
+. label values foreign_friends foreign1
+
+. 
+. 
+. label var party "Which political party would you vote for?"
+
+. replace party=5 if party==6
+(279 real changes made)
+
+. replace party=6 if party==7
+(6 real changes made)
+
+. replace party=7 if party==8
+(61 real changes made)
+
+. replace party=8 if party==9
+(12 real changes made)
+
+. replace party=9 if party==10
+(19 real changes made)
+
+. replace party=10 if party==11
+(84 real changes made)
+
+. label define party1 1 "SPÖ" 2 "ÖVP" 3 "FPÖ" 4 "BZÖ" 5 "Die Grünen" 6 "Team Stronach" 7 "NEOs" 8 "KPÖ" 9 "Piratenpartei" 10 "Other"
+
+. label values party party1
+
+. 
+. label var religion "Are you part of a religious community?"
+
+. label values religion yes_no
+
+. 
+. label var mess "How often do you go to prayer?"
+
+. label define mess1      3 "frequently" 2 "sometimes" 1 "rarely" 0 "never", replace
+
+. label values mess mess1
+
+. 
+. label var marital "Marital status"
+
+. label define marital1 1 "single" 2 "in a relationship" 3 "married", replace
+
+. label values marital marital1
+
+. 
+. rename gender female
+
+. replace female=0 if female==1
+(260 real changes made)
+
+. replace female=1 if female==2
+(426 real changes made)
+
+. label var female "Respondents gender, 1 if female"
+
+. label define gender 0 "male" 1 "female"
+
+. label values female gender
+
+. 
+. label var age "Respondents age in years"
+
+. 
+. label var study "Subject respondent studies"
+
+. 
+. label var origin "Country where participant is from."
+
+. 
+. 
+. /*
+> #############################
+> GENERATE important variables
+> #############################
+> */
+. 
+. *treatment identifier
+. 
+. gen treatment=1 if randnumber==2
+(995 missing values generated)
+
+. replace treatment=4 if randnumber==1
+(197 real changes made)
+
+. replace treatment=2 if randnumber==3 | randnumber==4
+(423 real changes made)
+
+. replace treatment=3 if randnumber==5 | randnumber==6
+(375 real changes made)
+
+. lab def t_lab 1 "CONFLICT" 4 "ECON" 2 "ENV GLOBAL" 3 "ENV LOCAL"
+
+. label var treatment "Treatment"
+
+. lab val treatment t_lab
+
+. 
+. tabulate treatment, gen(t_)
+
+  Treatment |      Freq.     Percent        Cum.
+------------+-----------------------------------
+   CONFLICT |        202       16.88       16.88
+ ENV GLOBAL |        423       35.34       52.21
+  ENV LOCAL |        375       31.33       83.54
+       ECON |        197       16.46      100.00
+------------+-----------------------------------
+      Total |      1,197      100.00
+
+. 
+. // Treatment dummies
+. gen econ = 0 
+
+. replace econ = 1 if treatment==1
+(202 real changes made)
+
+. label variable eco "Treatment economic reason for migration"
+
+. 
+. gen pol = 0 
+
+. replace pol = 1 if treatment==2
+(423 real changes made)
+
+. label variable pol "Treatment  political reason for miration"
+
+. 
+. gen env_cc = 0 
+
+. replace env_cc = 1 if treatment==3
+(375 real changes made)
+
+. label variable env_cc "Treatment environmental reason due to CC for migration"
+
+. 
+. gen env_self = 0 
+
+. replace env_self = 1 if treatment==4
+(197 real changes made)
+
+. label variable env_self "Treatment environmental reason self-imposed for migration"
+
+. 
+. 
+. // Polarization in acceptance levels
+. gen imm_opinion=.
+(1,197 missing values generated)
+
+. replace imm_opinion=1 if acceptance < 4
+(101 real changes made)
+
+. replace imm_opinion=2 if acceptance==4 
+(122 real changes made)
+
+. replace imm_opinion=3 if acceptance==5
+(181 real changes made)
+
+. replace imm_opinion=4 if acceptance > 5
+(793 real changes made)
+
+. 
+. lab def str_opinion 1 "<4 'against' " 2 "4='rather against'" 3 "5='rather support'" 4 ">5 'support' ", replace
+
+. lab val imm_opinion str_opinion
+
+. tab imm_opinion
+
+       imm_opinion |      Freq.     Percent        Cum.
+-------------------+-----------------------------------
+     <4 'against'  |        101        8.44        8.44
+4='rather against' |        122       10.19       18.63
+5='rather support' |        181       15.12       33.75
+     >5 'support'  |        793       66.25      100.00
+-------------------+-----------------------------------
+             Total |      1,197      100.00
+
+. 
+. lab var acceptance "Acceptance Level"
+
+. 
+. 
+. 
+. // OTHER DUMMIES
+. gen accept=0
+
+. replace accept=1 if acceptance > 4
+(974 real changes made)
+
+. lab var accept "Takes the value of one if the respondent would accept the migrant, 0 if not"
+
+. 
+. gen accept2=. if imm_opinion==2 | imm_opinion==3
+(1,197 missing values generated)
+
+. replace accept2=0 if imm_opinion==1
+(101 real changes made)
+
+. replace accept2=1 if imm_opinion==4
+(793 real changes made)
+
+. lab var accept2 "Binary acceptance variable without incl. undecided respondents"
+
+. 
+. gen incomplete=0
+
+. replace incomplete=1 if acceptance==.
+(511 real changes made)
+
+. lab def inco 0 "complete" 1 "incomplete"
+
+. lab val incomplete inco
+
+. 
+. *binary acceptance
+. generate h_acc=0 if acceptance < 5
+(974 missing values generated)
+
+. replace h_acc=1 if acceptance >=5
+(974 real changes made)
+
+. replace h_acc=. if incomplete==1
+(511 real changes made, 511 to missing)
+
+. 
+. gen single = 0
+
+. replace single = 1 if marital ==1
+(350 real changes made)
+
+. label var single "1 if respondent is single, 0 otherwise"
+
+. label values single yes_no
+
+. 
+. gen austrian = 0
+
+. replace austrian = 1 if origin=="AUT"
+(387 real changes made)
+
+. gen german = 0
+
+. replace german = 1 if origin=="GER"
+(130 real changes made)
+
+. gen italian = 0
+
+. replace italian = 1 if origin=="ITA"
+(113 real changes made)
+
+. gen origin_other = 1
+
+. replace origin_other = 0 if origin=="AUT" | origin=="GER" | origin=="ITA"
+(630 real changes made)
+
+. 
+. // PCA for expectations about migrants integrating into society [1/0] Questions
+. gen factor_norm=0
+
+. replace factor_norm=1 if norms_values > 2
+(911 real changes made)
+
+. lab var factor_norm "All people in a country should share the same norms and values."
+
+. 
+. global norm factor_edu factor_lang factor_cult factor_age factor_work factor_rel factor_skin
+
+. alpha $norm
+
+Test scale = mean(unstandardized items)
+
+Average interitem covariance:     .0231494
+Number of items in the scale:            7
+Scale reliability coefficient:      0.6382
+
+. pca factor_norm factor_edu factor_lang factor_cult factor_age factor_work factor_rel factor_skin, comp(1)
+
+Principal components/correlation                 Number of obs    =        686
+                                                 Number of comp.  =          1
+                                                 Trace            =          8
+    Rotation: (unrotated = principal)            Rho              =     0.3058
+
+    --------------------------------------------------------------------------
+       Component |   Eigenvalue   Difference         Proportion   Cumulative
+    -------------+------------------------------------------------------------
+           Comp1 |      2.44635      1.26434             0.3058       0.3058
+           Comp2 |      1.18201      .189506             0.1478       0.4535
+           Comp3 |      .992509      .152675             0.1241       0.5776
+           Comp4 |      .839835     .0558943             0.1050       0.6826
+           Comp5 |       .78394      .129411             0.0980       0.7806
+           Comp6 |       .65453     .0553518             0.0818       0.8624
+           Comp7 |      .599178     .0975393             0.0749       0.9373
+           Comp8 |      .501639            .             0.0627       1.0000
+    --------------------------------------------------------------------------
+
+Principal components (eigenvectors) 
+
+    --------------------------------------
+        Variable |    Comp1 | Unexplained 
+    -------------+----------+-------------
+     factor_norm |   0.2306 |       .8699 
+      factor_edu |   0.4056 |       .5975 
+     factor_lang |   0.3238 |       .7435 
+     factor_cult |   0.4694 |       .4609 
+      factor_age |   0.3128 |       .7606 
+     factor_work |   0.3099 |        .765 
+      factor_rel |   0.4096 |       .5896 
+     factor_skin |   0.3089 |       .7666 
+    --------------------------------------
+
+. estat loadings
+
+Principal component loadings (unrotated)
+    component normalization: sum of squares(column) = 1
+
+    ------------------------
+                 |    Comp1 
+    -------------+----------
+     factor_norm |    .2306 
+      factor_edu |    .4056 
+     factor_lang |    .3238 
+     factor_cult |    .4694 
+      factor_age |    .3128 
+     factor_work |    .3099 
+      factor_rel |    .4096 
+     factor_skin |    .3089 
+    ------------------------
+
+. predict pc1, score
+
+Scoring coefficients 
+    sum of squares(column-loading) = 1
+
+    ------------------------
+        Variable |    Comp1 
+    -------------+----------
+     factor_norm |   0.2306 
+      factor_edu |   0.4056 
+     factor_lang |   0.3238 
+     factor_cult |   0.4694 
+      factor_age |   0.3128 
+     factor_work |   0.3099 
+      factor_rel |   0.4096 
+     factor_skin |   0.3089 
+    ------------------------
+
+. estat kmo // middling, kmo=0.74 could use PCA or simmple index
+
+Kaiser-Meyer-Olkin measure of sampling adequacy
+
+    -----------------------
+        Variable |     kmo 
+    -------------+---------
+     factor_norm |  0.7919 
+      factor_edu |  0.7447 
+     factor_lang |  0.7129 
+     factor_cult |  0.7401 
+      factor_age |  0.7652 
+     factor_work |  0.7991 
+      factor_rel |  0.7178 
+     factor_skin |  0.7185 
+    -------------+---------
+         Overall |  0.7408 
+    -----------------------
+
+. sum pc1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+         pc1 |        686    7.26e-09    1.564083  -1.452146   8.857426
+
+. gen pca_factors=(pc1 -r(min))/(r(max)-r(min))
+(511 missing values generated)
+
+. label variable pca_factors "PCA: Important factors for immigrants that want to live in Austria"
+
+. 
+. bysort treatment: sum pca_factors
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = CONFLICT
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+ pca_factors |        113    .1229138     .146961          0   .6487303
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ENV GLOBAL
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+ pca_factors |        242    .1510268    .1623476          0          1
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ENV LOCAL
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+ pca_factors |        221    .1430992    .1469614          0   .8315713
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ECON
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+ pca_factors |        110    .1323935    .1412095          0   .9546582
+
+
+. 
+. gen index_attributes = (factor_norm + factor_edu + factor_lang + factor_cult + factor_age + factor_work + factor_rel + factor_skin)
+(511 missing values generated)
+
+. label var index_attributes "Index: Important attributes of immigrants"
+
+. 
+. // PCA for neihborhood
+. pwcorr surr_foreigner surr_crime surr_poverty, sig
+
+             | surr_f~r surr_c~e surr_p~y
+-------------+---------------------------
+surr_forei~r |   1.0000 
+             |
+             |
+  surr_crime |   0.4595   1.0000 
+             |   0.0000
+             |
+surr_poverty |   0.3041   0.5214   1.0000 
+             |   0.0000   0.0000
+             |
+
+. pca surr_foreigner surr_crime surr_poverty,mineigen(1) comp(3)
+
+Principal components/correlation                 Number of obs    =        686
+                                                 Number of comp.  =          1
+                                                 Trace            =          3
+    Rotation: (unrotated = principal)            Rho              =     0.6209
+
+    --------------------------------------------------------------------------
+       Component |   Eigenvalue   Difference         Proportion   Cumulative
+    -------------+------------------------------------------------------------
+           Comp1 |       1.8628      1.16303             0.6209       0.6209
+           Comp2 |      .699765      .262329             0.2333       0.8542
+           Comp3 |      .437436            .             0.1458       1.0000
+    --------------------------------------------------------------------------
+
+Principal components (eigenvectors) 
+
+    --------------------------------------
+        Variable |    Comp1 | Unexplained 
+    -------------+----------+-------------
+    surr_forei~r |   0.5339 |        .469 
+      surr_crime |   0.6271 |       .2674 
+    surr_poverty |   0.5672 |       .4007 
+    --------------------------------------
+
+. estat loadings
+
+Principal component loadings (unrotated)
+    component normalization: sum of squares(column) = 1
+
+    ------------------------
+                 |    Comp1 
+    -------------+----------
+    surr_forei~r |    .5339 
+      surr_crime |    .6271 
+    surr_poverty |    .5672 
+    ------------------------
+
+. predict pc2, score
+
+Scoring coefficients 
+    sum of squares(column-loading) = 1
+
+    ------------------------
+        Variable |    Comp1 
+    -------------+----------
+    surr_forei~r |   0.5339 
+      surr_crime |   0.6271 
+    surr_poverty |   0.5672 
+    ------------------------
+
+. estat kmo // mediocre, kmo=0.62, we should rather not use the PCA index
+
+Kaiser-Meyer-Olkin measure of sampling adequacy
+
+    -----------------------
+        Variable |     kmo 
+    -------------+---------
+    surr_forei~r |  0.6779 
+      surr_crime |  0.5865 
+    surr_poverty |  0.6335 
+    -------------+---------
+         Overall |  0.6233 
+    -----------------------
+
+. sum pc2
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+         pc2 |        686    1.45e-08    1.364844  -2.389476    5.80441
+
+. gen pca_surr=(pc2 -r(min))/(r(max)-r(min))
+(511 missing values generated)
+
+. label variable pca_surr "PCA: Foreigners, crime and poverty in neighborhood"
+
+. bysort treatment: sum pca_surr
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = CONFLICT
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+    pca_surr |        113    .2764637    .1548174          0        .75
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ENV GLOBAL
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+    pca_surr |        242    .2918934    .1696073          0          1
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ENV LOCAL
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+    pca_surr |        221    .2965501    .1730887          0   .9322235
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ECON
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+    pca_surr |        110    .2966641    .1592093          0   .7288939
+
+
+. 
+. gen sur_for= surr_foreigner+1
+(511 missing values generated)
+
+. gen sur_cri= surr_crime+1
+(511 missing values generated)
+
+. gen sur_pov= surr_poverty+1
+(511 missing values generated)
+
+. 
+. egen index_surr= rowmean(sur_for sur_cri sur_pov)
+(511 missing values generated)
+
+. label var index_surr "Index: Neighborhood - crimes, poverty and foreigners"
+
+. sum index_surr
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  index_surr |        686    2.218659    .6723373          1          5
+
+. gen std_surr=(index_surr -r(min))/(r(max)-r(min))
+(511 missing values generated)
+
+. bysort treatment: sum std_surr
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = CONFLICT
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+    std_surr |        113    .2920354    .1563487          0        .75
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ENV GLOBAL
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+    std_surr |        242    .3044077     .171342          0          1
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ENV LOCAL
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+    std_surr |        221    .3092006    .1743916          0   .9166666
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ECON
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+    std_surr |        110    .3090909    .1609673          0   .6666667
+
+
+. 
+. 
+. // PCA, simple additive index for perceived impacts by immigrants: tax burden, steal jobs and increase crime
+. gen steal_jobs = 0 if help_economy!=.
+(511 missing values generated)
+
+. replace steal_jobs =1 if help_economy==1
+(51 real changes made)
+
+. label var steal_jobs "Dummy: Immigrants steal jobs"
+
+. 
+. gen tax_burden = 0 if immigrants_costly!=.
+(511 missing values generated)
+
+. replace tax_burden = 1 if immigrants_costly==1
+(208 real changes made)
+
+. label var tax_burden "Dummy: Immigrants cost the welfare state"
+
+. lab def tax_lab 1 "Cost more" 0 "Contribute more", replace
+
+. lab val tax_burden tax_lab
+
+. 
+. gen increase_crime = 0 if crime_rate!=.
+(511 missing values generated)
+
+. replace increase_crime = 1 if crime_rate >2
+(836 real changes made)
+
+. lab var increase_crime "Dummy: Migration increases crime rate"
+
+. 
+. 
+. global perceived_impacts steal_jobs tax_burden crime_rate
+
+. pwcorr $perceived_impacts
+
+             | steal_~s tax_bu~n crime_~e
+-------------+---------------------------
+  steal_jobs |   1.0000 
+  tax_burden |   0.3208   1.0000 
+  crime_rate |   0.3819   0.4355   1.0000 
+
+. alpha $perceived_impacts
+
+Test scale = mean(unstandardized items)
+
+Average interitem covariance:     .0800863
+Number of items in the scale:            3
+Scale reliability coefficient:      0.5954
+
+. pca $perceived_impacts, comp(1)
+
+Principal components/correlation                 Number of obs    =        686
+                                                 Number of comp.  =          1
+                                                 Trace            =          3
+    Rotation: (unrotated = principal)            Rho              =     0.5869
+
+    --------------------------------------------------------------------------
+       Component |   Eigenvalue   Difference         Proportion   Cumulative
+    -------------+------------------------------------------------------------
+           Comp1 |      1.76072      1.07478             0.5869       0.5869
+           Comp2 |      .685948       .13262             0.2286       0.8156
+           Comp3 |      .553328            .             0.1844       1.0000
+    --------------------------------------------------------------------------
+
+Principal components (eigenvectors) 
+
+    --------------------------------------
+        Variable |    Comp1 | Unexplained 
+    -------------+----------+-------------
+      steal_jobs |   0.5476 |       .4721 
+      tax_burden |   0.5775 |       .4127 
+      crime_rate |   0.6055 |       .3544 
+    --------------------------------------
+
+. estat loadings
+
+Principal component loadings (unrotated)
+    component normalization: sum of squares(column) = 1
+
+    ------------------------
+                 |    Comp1 
+    -------------+----------
+      steal_jobs |    .5476 
+      tax_burden |    .5775 
+      crime_rate |    .6055 
+    ------------------------
+
+. predict immigrants_impacts, score
+
+Scoring coefficients 
+    sum of squares(column-loading) = 1
+
+    ------------------------
+        Variable |    Comp1 
+    -------------+----------
+      steal_jobs |   0.5476 
+      tax_burden |   0.5775 
+      crime_rate |   0.6055 
+    ------------------------
+
+. estat kmo // middling, kmo=0.64 could be used 
+
+Kaiser-Meyer-Olkin measure of sampling adequacy
+
+    -----------------------
+        Variable |     kmo 
+    -------------+---------
+      steal_jobs |  0.6835 
+      tax_burden |  0.6432 
+      crime_rate |  0.6167 
+    -------------+---------
+         Overall |  0.6434 
+    -----------------------
+
+. sum immigrants_impacts
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+immigrants~s |        686    5.86e-09    1.326923  -2.837035   4.116806
+
+. 
+. 
+. 
+. // dummy for knowledge of Geneva Refugee Convention
+. gen geneva=1
+
+. replace geneva=0 if treatment==1 & legit_conflict==0
+(1 real change made)
+
+. replace geneva=0 if treatment==2 & legit_eco==1
+(34 real changes made)
+
+. replace geneva=0 if treatment==3 & legit_env==1
+(53 real changes made)
+
+. replace geneva=0 if treatment==4 & legit_env==1
+(32 real changes made)
+
+. label var geneva "Dummy: Knowledge of the geneva refugee convention of respective treatment"
+
+. lab def know1 0 "No" 1 "Yes", replace
+
+. lab val geneva know1
+
+. 
+. gen knowledge=0
+
+. replace knowledge=1 if legit_conflict==1 & legit_eco==0 & legit_env==0
+(474 real changes made)
+
+. label var knowledge "Dummy: Knowledge of the geneva refugee convention"
+
+. lab val knowledge know1
+
+. 
+. // Other variables
+. gen age_sq = age*age
+(511 missing values generated)
+
+. 
+. gen never_mess=0
+
+. replace never_mess=1 if mess==0
+(315 real changes made)
+
+. lab var never_mess "Dummy: Never goes to mess"
+
+. 
+. gen diff_friends=0
+
+. replace diff_friends=1 if foreign_friends > 0
+(1,096 real changes made)
+
+. lab var diff_friends "Dummy: Friends from different ethnicity or religion"
+
+. 
+. gen high_interest=0
+
+. replace high_interest=1 if interest==2
+(288 real changes made)
+
+. lab var high_interest "Dummy: Very interested in migration topic"
+
+. gen legit_all = 0
+
+. replace legit_all = 1 if legit_conflict==1 & legit_eco==1 & legit_env==1
+(23 real changes made)
+
+. label var legit_all "1 if respondents think all migrants can apply for asylum"
+
+. 
+. gen center_voter = 0
+
+. replace center_voter = 1 if party==1 | party==2 | party==7
+(235 real changes made)
+
+. label var center_voter "1 if respondent would vote for either SPÖ or ÖVP"
+
+. 
+. gen left_voter = 0
+
+. replace left_voter = 1 if party==5 | party==9 | party==8
+(310 real changes made)
+
+. label var left_voter "1 if participant voted for 'die Grünen'"
+
+. 
+. gen right_voter = 0
+
+. replace right_voter = 1 if party==3 | party==4 | party==6
+(57 real changes made)
+
+. label var right_voter "1 if respondent would vote for the Freedom party of Austria"
+
+. 
+. gen no_voter = 0
+
+. replace no_voter = 1 if party==10
+(84 real changes made)
+
+. label var no_voter "1 if no party preference"
+
+. 
+. gen asylum_abroad = 0
+
+. replace asylum_abroad = 1 if pleas_abroad > 2
+(989 real changes made)
+
+. lab var asylum_abroad "Dummy: Asylum pleas should be made outside the EU"
+
+. 
+. 
+. label define party1 1 "SPÖ" 2 "ÖVP" 3 "FPÖ" 4 "BZÖ" 5 "Die Grünen" 6 "Team Stronach" 7 "NEOs" 8 "KPÖ" 9 "Piratenpartei" 10 "Other", replace
+
+. 
+. *party identifier
+. gen party_affiliation=.
+(1,197 missing values generated)
+
+. replace party_affiliation=1 if left_voter==1
+(310 real changes made)
+
+. replace party_affiliation=2 if center_voter==1
+(235 real changes made)
+
+. replace party_affiliation=3 if right_voter==1
+(57 real changes made)
+
+. replace party_affiliation=4 if no_voter==1
+(84 real changes made)
+
+. label def pa 1 "Left voter" 2 "Center voter" 3 "Right voter" 4 "No voter"
+
+. lab val party_affiliation pa
+
+. 
+. *treatment interactions 
+. gen t2_right = t_2*right_voter
+
+. gen t3_right = t_3*right_voter
+
+. gen t4_right = t_4*right_voter
+
+. gen t2_female = t_2*female
+(511 missing values generated)
+
+. gen t3_female = t_3*female
+(511 missing values generated)
+
+. gen t4_female = t_4*female
+(511 missing values generated)
+
+. 
+. 
+. *more labeling
+. label var female "Female"
+
+. label var age "Age"
+
+. label var religion "Dummy: Religious affiliation"
+
+. label var single "Dummy: Single"
+
+. label var left_voter "Dummy: Left voter"
+
+. label var right_voter "Dummy: Right voter"
+
+. label var center_voter "Dummy: Center voter"
+
+. label var no_voter "Dummy: No party preference"
+
+. 
+. save "$datapath\migration_clean.dta", replace
+file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Stata Migration survey experiment\DTA-FILES\migration_clean.dta saved
+
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. ** EOF
+. 
+end of do-file
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. *--------------------------------------------------------------------
+. * SCRIPT: 02_analysis.do
+. * PURPOSE: replicates all tables and figures and saves the results
+. *--------------------------------------------------------------------
+. *--------------------------------------------------
+. * AUTHOR GUIDELINES - Regional Environmental Change:
+. * The figures should be 84 mm, 129 mm, or 174 mm wide and not higher than 234 mm.
+. 
+. /* (1) MAIN MANUSCRIPT
+>         - Figure 1: Acceptance by treatment and polarization
+>         - TABLE 2: Overall determinants of acceptance levels with POL as reference group
+>         - TABLE 3: HETEROGENEOUS TREATMENT EFFECTS
+>         (2) SUPPLEMENTARY MATERIALS
+> */
+. *--------------------------------------------------
+. use "$working_ANALYSIS/processed/migration_clean.dta", replace
+file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/processed/migration_clean.dta not found
+r(601);
+
+end of do-file
+
+r(601);
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. *--------------------------------------------------------------------------
+. * SCRIPT: 1_clean_data.do
+. * PURPOSE: cleans the  experimental data and generates additional variables
+. *--------------------------------------------------------------------------
+. *Import excel dataset
+. import excel using "$working_ANALYSIS/data/migration_survey_experiment.xlsx" , firstrow clear
+(40 vars, 1,197 obs)
+
+. 
+. 
+. 
+. *--------------------------------------------------------------------------
+. * Cleaing & Labelling
+. *--------------------------------------------------------------------------
+. drop ecoacceptance envccacceptance polacceptance  envnccacceptance
+
+. 
+. label var acceptance "Would you agree that this person can legally migrate to Austria?"
+
+. label define one_eight 1 "1 'completely against'" 2 "2 'strongly against'" 3 "3 'against'" 4 "4 'rather against'" 5 "5 'rather support'" 6 "6 'suppo
+> rt'" 7 "7 'strongly support'" 8 "8 'completely support'",replace
+
+. label values acceptance one_eight
+
+. 
+. label var wtp "Willingness to pay in order that 10% more migrants can move to Austria"
+
+. 
+. label var wta "Willingness to accept 10% more migrants in Austria"
+
+. 
+. label var sure "How sure are you about the amount you stated for wtp/wta?"
+
+. 
+. label define yes_no 0 "no" 1 "yes"
+
+. 
+. rename reffamily unify_fam
+
+. label var unify_fam "Would you support migration of his family, once he found a job?"
+
+. label values unify_fam one_eight
+
+. 
+. rename topic interest
+
+. label var interest "Interest in migration topic"
+
+. label define interest1 0 "not interested at all" 1 "somewhat interested" 2 "very interested", replace
+
+. label values interest interest1
+
+. 
+. 
+. rename conflictcause legit_conflict
+
+. label var legit_conflict "Is conflict a legitimate reason for asylum (Geneva Convention)?"
+
+. label values  legit_conflict yes_no
+
+. 
+. rename ecocause legit_eco
+
+. label var legit_eco "Are economic problems a legitimate reason for asylum (Geneva Convention)?"
+
+. label values  legit_eco yes_no
+
+. 
+. rename envcause legit_env
+
+. label var legit_env "Is environmental degration a legitimate reason for asylum (Geneva Convention)?"
+
+. label values  legit_env yes_no
+
+. 
+. 
+. foreach var of varlist factor_* {
+  2.         label var `var' "Important factors for migrants if they want to live in Austria."
+  3.         label values `var' yes_no
+  4.         }
+
+. 
+. rename work_shortage help_economy
+
+. label var help_economy "Do immigrants take jobs from Austrians?"
+
+. label define steal1 2 "They help the economy" 1 "They steal jobs" 0 "Don't know", replace
+
+. label values help_economy steal1
+
+. 
+. rename give_take immigrants_costly
+
+. label var immigrants_costly "Do immigrants cost the welfare state more than they give?"
+
+. label define costly1 1 "cost more" 2 "contribute more" 0 "Don't know", replace
+
+. label values immigrants_costly costly1
+
+. 
+. label var crime_rate "Scale on crime rate changes due to migration from increases strongly to reduces strongly"
+note: label truncated to 80 characters
+
+. label define crime1 4 "strong increase" 3 "increase slightly" 2 "same" 1 "decrease slightly" 0 "decrease strongly",replace
+
+. label values crime_rate crime1
+
+. 
+. rename appeals_eu pleas_abroad
+
+. label var pleas_abroad "Asylum pleas should be already done abroad, outside the EU."
+
+. label define agree_scale 4 "agree" 3 "agree slightly" 2 "don't care" 1 "disagree slightly" 0 "disagree",replace
+
+. label values pleas_abroad agree_scale
+
+. 
+. label define surr_scale 0 "very low" 1 "low" 2 "moderate" 3 "high" 4 "very high", replace
+
+. label var surr_foreigner "Share of foreigners in neighborhood on a scale from very high to very low"
+
+. label values surr_foreigner surr_scale
+
+. label var surr_crime "Crimes in neighborhood on a scale from very high to very low"
+
+. label values surr_crime surr_scale
+
+. label var surr_poverty "Poverty rate in neighborhood on a scale from very high to very low"
+
+. label values surr_poverty surr_scale
+
+. 
+. label var norms_values "All people in a country should share the same norms and values"
+
+. label values norms_values agree_scale
+
+. 
+. rename clique foreign_friends
+
+. label var foreign_friends "Do you have friends of different ethnicitiy, religion, etc.?"
+
+. label define foreign1 0 "none"  1 "a few" 2 "many", replace
+
+. label values foreign_friends foreign1
+
+. 
+. 
+. label var party "Which political party would you vote for?"
+
+. replace party=5 if party==6
+(279 real changes made)
+
+. replace party=6 if party==7
+(6 real changes made)
+
+. replace party=7 if party==8
+(61 real changes made)
+
+. replace party=8 if party==9
+(12 real changes made)
+
+. replace party=9 if party==10
+(19 real changes made)
+
+. replace party=10 if party==11
+(84 real changes made)
+
+. label define party1 1 "SPÖ" 2 "ÖVP" 3 "FPÖ" 4 "BZÖ" 5 "Die Grünen" 6 "Team Stronach" 7 "NEOs" 8 "KPÖ" 9 "Piratenpartei" 10 "Other"
+
+. label values party party1
+
+. 
+. label var religion "Are you part of a religious community?"
+
+. label values religion yes_no
+
+. 
+. label var mess "How often do you go to prayer?"
+
+. label define mess1      3 "frequently" 2 "sometimes" 1 "rarely" 0 "never", replace
+
+. label values mess mess1
+
+. 
+. label var marital "Marital status"
+
+. label define marital1 1 "single" 2 "in a relationship" 3 "married", replace
+
+. label values marital marital1
+
+. 
+. rename gender female
+
+. replace female=0 if female==1
+(260 real changes made)
+
+. replace female=1 if female==2
+(426 real changes made)
+
+. label var female "Respondents gender, 1 if female"
+
+. label define gender 0 "male" 1 "female"
+
+. label values female gender
+
+. 
+. label var age "Respondents age in years"
+
+. 
+. label var study "Subject respondent studies"
+
+. 
+. label var origin "Country where participant is from."
+
+. 
+. 
+. /*
+> #############################
+> GENERATE important variables
+> #############################
+> */
+. 
+. *treatment identifier
+. 
+. gen treatment=1 if randnumber==2
+(995 missing values generated)
+
+. replace treatment=4 if randnumber==1
+(197 real changes made)
+
+. replace treatment=2 if randnumber==3 | randnumber==4
+(423 real changes made)
+
+. replace treatment=3 if randnumber==5 | randnumber==6
+(375 real changes made)
+
+. lab def t_lab 1 "CONFLICT" 4 "ECON" 2 "ENV GLOBAL" 3 "ENV LOCAL"
+
+. label var treatment "Treatment"
+
+. lab val treatment t_lab
+
+. 
+. tabulate treatment, gen(t_)
+
+  Treatment |      Freq.     Percent        Cum.
+------------+-----------------------------------
+   CONFLICT |        202       16.88       16.88
+ ENV GLOBAL |        423       35.34       52.21
+  ENV LOCAL |        375       31.33       83.54
+       ECON |        197       16.46      100.00
+------------+-----------------------------------
+      Total |      1,197      100.00
+
+. 
+. // Treatment dummies
+. gen econ = 0 
+
+. replace econ = 1 if treatment==1
+(202 real changes made)
+
+. label variable eco "Treatment economic reason for migration"
+
+. 
+. gen pol = 0 
+
+. replace pol = 1 if treatment==2
+(423 real changes made)
+
+. label variable pol "Treatment  political reason for miration"
+
+. 
+. gen env_cc = 0 
+
+. replace env_cc = 1 if treatment==3
+(375 real changes made)
+
+. label variable env_cc "Treatment environmental reason due to CC for migration"
+
+. 
+. gen env_self = 0 
+
+. replace env_self = 1 if treatment==4
+(197 real changes made)
+
+. label variable env_self "Treatment environmental reason self-imposed for migration"
+
+. 
+. 
+. // Polarization in acceptance levels
+. gen imm_opinion=.
+(1,197 missing values generated)
+
+. replace imm_opinion=1 if acceptance < 4
+(101 real changes made)
+
+. replace imm_opinion=2 if acceptance==4 
+(122 real changes made)
+
+. replace imm_opinion=3 if acceptance==5
+(181 real changes made)
+
+. replace imm_opinion=4 if acceptance > 5
+(793 real changes made)
+
+. 
+. lab def str_opinion 1 "<4 'against' " 2 "4='rather against'" 3 "5='rather support'" 4 ">5 'support' ", replace
+
+. lab val imm_opinion str_opinion
+
+. tab imm_opinion
+
+       imm_opinion |      Freq.     Percent        Cum.
+-------------------+-----------------------------------
+     <4 'against'  |        101        8.44        8.44
+4='rather against' |        122       10.19       18.63
+5='rather support' |        181       15.12       33.75
+     >5 'support'  |        793       66.25      100.00
+-------------------+-----------------------------------
+             Total |      1,197      100.00
+
+. 
+. lab var acceptance "Acceptance Level"
+
+. 
+. 
+. 
+. // OTHER DUMMIES
+. gen accept=0
+
+. replace accept=1 if acceptance > 4
+(974 real changes made)
+
+. lab var accept "Takes the value of one if the respondent would accept the migrant, 0 if not"
+
+. 
+. gen accept2=. if imm_opinion==2 | imm_opinion==3
+(1,197 missing values generated)
+
+. replace accept2=0 if imm_opinion==1
+(101 real changes made)
+
+. replace accept2=1 if imm_opinion==4
+(793 real changes made)
+
+. lab var accept2 "Binary acceptance variable without incl. undecided respondents"
+
+. 
+. gen incomplete=0
+
+. replace incomplete=1 if acceptance==.
+(511 real changes made)
+
+. lab def inco 0 "complete" 1 "incomplete"
+
+. lab val incomplete inco
+
+. 
+. *binary acceptance
+. generate h_acc=0 if acceptance < 5
+(974 missing values generated)
+
+. replace h_acc=1 if acceptance >=5
+(974 real changes made)
+
+. replace h_acc=. if incomplete==1
+(511 real changes made, 511 to missing)
+
+. 
+. gen single = 0
+
+. replace single = 1 if marital ==1
+(350 real changes made)
+
+. label var single "1 if respondent is single, 0 otherwise"
+
+. label values single yes_no
+
+. 
+. gen austrian = 0
+
+. replace austrian = 1 if origin=="AUT"
+(387 real changes made)
+
+. gen german = 0
+
+. replace german = 1 if origin=="GER"
+(130 real changes made)
+
+. gen italian = 0
+
+. replace italian = 1 if origin=="ITA"
+(113 real changes made)
+
+. gen origin_other = 1
+
+. replace origin_other = 0 if origin=="AUT" | origin=="GER" | origin=="ITA"
+(630 real changes made)
+
+. 
+. // PCA for expectations about migrants integrating into society [1/0] Questions
+. gen factor_norm=0
+
+. replace factor_norm=1 if norms_values > 2
+(911 real changes made)
+
+. lab var factor_norm "All people in a country should share the same norms and values."
+
+. 
+. global norm factor_edu factor_lang factor_cult factor_age factor_work factor_rel factor_skin
+
+. alpha $norm
+
+Test scale = mean(unstandardized items)
+
+Average interitem covariance:     .0231494
+Number of items in the scale:            7
+Scale reliability coefficient:      0.6382
+
+. pca factor_norm factor_edu factor_lang factor_cult factor_age factor_work factor_rel factor_skin, comp(1)
+
+Principal components/correlation                 Number of obs    =        686
+                                                 Number of comp.  =          1
+                                                 Trace            =          8
+    Rotation: (unrotated = principal)            Rho              =     0.3058
+
+    --------------------------------------------------------------------------
+       Component |   Eigenvalue   Difference         Proportion   Cumulative
+    -------------+------------------------------------------------------------
+           Comp1 |      2.44635      1.26434             0.3058       0.3058
+           Comp2 |      1.18201      .189506             0.1478       0.4535
+           Comp3 |      .992509      .152675             0.1241       0.5776
+           Comp4 |      .839835     .0558943             0.1050       0.6826
+           Comp5 |       .78394      .129411             0.0980       0.7806
+           Comp6 |       .65453     .0553518             0.0818       0.8624
+           Comp7 |      .599178     .0975393             0.0749       0.9373
+           Comp8 |      .501639            .             0.0627       1.0000
+    --------------------------------------------------------------------------
+
+Principal components (eigenvectors) 
+
+    --------------------------------------
+        Variable |    Comp1 | Unexplained 
+    -------------+----------+-------------
+     factor_norm |   0.2306 |       .8699 
+      factor_edu |   0.4056 |       .5975 
+     factor_lang |   0.3238 |       .7435 
+     factor_cult |   0.4694 |       .4609 
+      factor_age |   0.3128 |       .7606 
+     factor_work |   0.3099 |        .765 
+      factor_rel |   0.4096 |       .5896 
+     factor_skin |   0.3089 |       .7666 
+    --------------------------------------
+
+. estat loadings
+
+Principal component loadings (unrotated)
+    component normalization: sum of squares(column) = 1
+
+    ------------------------
+                 |    Comp1 
+    -------------+----------
+     factor_norm |    .2306 
+      factor_edu |    .4056 
+     factor_lang |    .3238 
+     factor_cult |    .4694 
+      factor_age |    .3128 
+     factor_work |    .3099 
+      factor_rel |    .4096 
+     factor_skin |    .3089 
+    ------------------------
+
+. predict pc1, score
+
+Scoring coefficients 
+    sum of squares(column-loading) = 1
+
+    ------------------------
+        Variable |    Comp1 
+    -------------+----------
+     factor_norm |   0.2306 
+      factor_edu |   0.4056 
+     factor_lang |   0.3238 
+     factor_cult |   0.4694 
+      factor_age |   0.3128 
+     factor_work |   0.3099 
+      factor_rel |   0.4096 
+     factor_skin |   0.3089 
+    ------------------------
+
+. estat kmo // middling, kmo=0.74 could use PCA or simmple index
+
+Kaiser-Meyer-Olkin measure of sampling adequacy
+
+    -----------------------
+        Variable |     kmo 
+    -------------+---------
+     factor_norm |  0.7919 
+      factor_edu |  0.7447 
+     factor_lang |  0.7129 
+     factor_cult |  0.7401 
+      factor_age |  0.7652 
+     factor_work |  0.7991 
+      factor_rel |  0.7178 
+     factor_skin |  0.7185 
+    -------------+---------
+         Overall |  0.7408 
+    -----------------------
+
+. sum pc1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+         pc1 |        686    7.26e-09    1.564083  -1.452146   8.857426
+
+. gen pca_factors=(pc1 -r(min))/(r(max)-r(min))
+(511 missing values generated)
+
+. label variable pca_factors "PCA: Important factors for immigrants that want to live in Austria"
+
+. 
+. bysort treatment: sum pca_factors
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = CONFLICT
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+ pca_factors |        113    .1229138     .146961          0   .6487303
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ENV GLOBAL
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+ pca_factors |        242    .1510268    .1623476          0          1
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ENV LOCAL
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+ pca_factors |        221    .1430992    .1469614          0   .8315713
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ECON
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+ pca_factors |        110    .1323935    .1412095          0   .9546582
+
+
+. 
+. gen index_attributes = (factor_norm + factor_edu + factor_lang + factor_cult + factor_age + factor_work + factor_rel + factor_skin)
+(511 missing values generated)
+
+. label var index_attributes "Index: Important attributes of immigrants"
+
+. 
+. // PCA for neihborhood
+. pwcorr surr_foreigner surr_crime surr_poverty, sig
+
+             | surr_f~r surr_c~e surr_p~y
+-------------+---------------------------
+surr_forei~r |   1.0000 
+             |
+             |
+  surr_crime |   0.4595   1.0000 
+             |   0.0000
+             |
+surr_poverty |   0.3041   0.5214   1.0000 
+             |   0.0000   0.0000
+             |
+
+. pca surr_foreigner surr_crime surr_poverty,mineigen(1) comp(3)
+
+Principal components/correlation                 Number of obs    =        686
+                                                 Number of comp.  =          1
+                                                 Trace            =          3
+    Rotation: (unrotated = principal)            Rho              =     0.6209
+
+    --------------------------------------------------------------------------
+       Component |   Eigenvalue   Difference         Proportion   Cumulative
+    -------------+------------------------------------------------------------
+           Comp1 |       1.8628      1.16303             0.6209       0.6209
+           Comp2 |      .699765      .262329             0.2333       0.8542
+           Comp3 |      .437436            .             0.1458       1.0000
+    --------------------------------------------------------------------------
+
+Principal components (eigenvectors) 
+
+    --------------------------------------
+        Variable |    Comp1 | Unexplained 
+    -------------+----------+-------------
+    surr_forei~r |   0.5339 |        .469 
+      surr_crime |   0.6271 |       .2674 
+    surr_poverty |   0.5672 |       .4007 
+    --------------------------------------
+
+. estat loadings
+
+Principal component loadings (unrotated)
+    component normalization: sum of squares(column) = 1
+
+    ------------------------
+                 |    Comp1 
+    -------------+----------
+    surr_forei~r |    .5339 
+      surr_crime |    .6271 
+    surr_poverty |    .5672 
+    ------------------------
+
+. predict pc2, score
+
+Scoring coefficients 
+    sum of squares(column-loading) = 1
+
+    ------------------------
+        Variable |    Comp1 
+    -------------+----------
+    surr_forei~r |   0.5339 
+      surr_crime |   0.6271 
+    surr_poverty |   0.5672 
+    ------------------------
+
+. estat kmo // mediocre, kmo=0.62, we should rather not use the PCA index
+
+Kaiser-Meyer-Olkin measure of sampling adequacy
+
+    -----------------------
+        Variable |     kmo 
+    -------------+---------
+    surr_forei~r |  0.6779 
+      surr_crime |  0.5865 
+    surr_poverty |  0.6335 
+    -------------+---------
+         Overall |  0.6233 
+    -----------------------
+
+. sum pc2
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+         pc2 |        686    1.45e-08    1.364844  -2.389476    5.80441
+
+. gen pca_surr=(pc2 -r(min))/(r(max)-r(min))
+(511 missing values generated)
+
+. label variable pca_surr "PCA: Foreigners, crime and poverty in neighborhood"
+
+. bysort treatment: sum pca_surr
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = CONFLICT
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+    pca_surr |        113    .2764637    .1548174          0        .75
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ENV GLOBAL
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+    pca_surr |        242    .2918934    .1696073          0          1
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ENV LOCAL
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+    pca_surr |        221    .2965501    .1730887          0   .9322235
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ECON
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+    pca_surr |        110    .2966641    .1592093          0   .7288939
+
+
+. 
+. gen sur_for= surr_foreigner+1
+(511 missing values generated)
+
+. gen sur_cri= surr_crime+1
+(511 missing values generated)
+
+. gen sur_pov= surr_poverty+1
+(511 missing values generated)
+
+. 
+. egen index_surr= rowmean(sur_for sur_cri sur_pov)
+(511 missing values generated)
+
+. label var index_surr "Index: Neighborhood - crimes, poverty and foreigners"
+
+. sum index_surr
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  index_surr |        686    2.218659    .6723373          1          5
+
+. gen std_surr=(index_surr -r(min))/(r(max)-r(min))
+(511 missing values generated)
+
+. bysort treatment: sum std_surr
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = CONFLICT
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+    std_surr |        113    .2920354    .1563487          0        .75
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ENV GLOBAL
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+    std_surr |        242    .3044077     .171342          0          1
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ENV LOCAL
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+    std_surr |        221    .3092006    .1743916          0   .9166666
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+-> treatment = ECON
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+    std_surr |        110    .3090909    .1609673          0   .6666667
+
+
+. 
+. 
+. // PCA, simple additive index for perceived impacts by immigrants: tax burden, steal jobs and increase crime
+. gen steal_jobs = 0 if help_economy!=.
+(511 missing values generated)
+
+. replace steal_jobs =1 if help_economy==1
+(51 real changes made)
+
+. label var steal_jobs "Dummy: Immigrants steal jobs"
+
+. 
+. gen tax_burden = 0 if immigrants_costly!=.
+(511 missing values generated)
+
+. replace tax_burden = 1 if immigrants_costly==1
+(208 real changes made)
+
+. label var tax_burden "Dummy: Immigrants cost the welfare state"
+
+. lab def tax_lab 1 "Cost more" 0 "Contribute more", replace
+
+. lab val tax_burden tax_lab
+
+. 
+. gen increase_crime = 0 if crime_rate!=.
+(511 missing values generated)
+
+. replace increase_crime = 1 if crime_rate >2
+(836 real changes made)
+
+. lab var increase_crime "Dummy: Migration increases crime rate"
+
+. 
+. 
+. global perceived_impacts steal_jobs tax_burden crime_rate
+
+. pwcorr $perceived_impacts
+
+             | steal_~s tax_bu~n crime_~e
+-------------+---------------------------
+  steal_jobs |   1.0000 
+  tax_burden |   0.3208   1.0000 
+  crime_rate |   0.3819   0.4355   1.0000 
+
+. alpha $perceived_impacts
+
+Test scale = mean(unstandardized items)
+
+Average interitem covariance:     .0800863
+Number of items in the scale:            3
+Scale reliability coefficient:      0.5954
+
+. pca $perceived_impacts, comp(1)
+
+Principal components/correlation                 Number of obs    =        686
+                                                 Number of comp.  =          1
+                                                 Trace            =          3
+    Rotation: (unrotated = principal)            Rho              =     0.5869
+
+    --------------------------------------------------------------------------
+       Component |   Eigenvalue   Difference         Proportion   Cumulative
+    -------------+------------------------------------------------------------
+           Comp1 |      1.76072      1.07478             0.5869       0.5869
+           Comp2 |      .685948       .13262             0.2286       0.8156
+           Comp3 |      .553328            .             0.1844       1.0000
+    --------------------------------------------------------------------------
+
+Principal components (eigenvectors) 
+
+    --------------------------------------
+        Variable |    Comp1 | Unexplained 
+    -------------+----------+-------------
+      steal_jobs |   0.5476 |       .4721 
+      tax_burden |   0.5775 |       .4127 
+      crime_rate |   0.6055 |       .3544 
+    --------------------------------------
+
+. estat loadings
+
+Principal component loadings (unrotated)
+    component normalization: sum of squares(column) = 1
+
+    ------------------------
+                 |    Comp1 
+    -------------+----------
+      steal_jobs |    .5476 
+      tax_burden |    .5775 
+      crime_rate |    .6055 
+    ------------------------
+
+. predict immigrants_impacts, score
+
+Scoring coefficients 
+    sum of squares(column-loading) = 1
+
+    ------------------------
+        Variable |    Comp1 
+    -------------+----------
+      steal_jobs |   0.5476 
+      tax_burden |   0.5775 
+      crime_rate |   0.6055 
+    ------------------------
+
+. estat kmo // middling, kmo=0.64 could be used 
+
+Kaiser-Meyer-Olkin measure of sampling adequacy
+
+    -----------------------
+        Variable |     kmo 
+    -------------+---------
+      steal_jobs |  0.6835 
+      tax_burden |  0.6432 
+      crime_rate |  0.6167 
+    -------------+---------
+         Overall |  0.6434 
+    -----------------------
+
+. sum immigrants_impacts
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+immigrants~s |        686    5.86e-09    1.326923  -2.837035   4.116806
+
+. 
+. 
+. 
+. // dummy for knowledge of Geneva Refugee Convention
+. gen geneva=1
+
+. replace geneva=0 if treatment==1 & legit_conflict==0
+(1 real change made)
+
+. replace geneva=0 if treatment==2 & legit_eco==1
+(34 real changes made)
+
+. replace geneva=0 if treatment==3 & legit_env==1
+(53 real changes made)
+
+. replace geneva=0 if treatment==4 & legit_env==1
+(32 real changes made)
+
+. label var geneva "Dummy: Knowledge of the geneva refugee convention of respective treatment"
+
+. lab def know1 0 "No" 1 "Yes", replace
+
+. lab val geneva know1
+
+. 
+. gen knowledge=0
+
+. replace knowledge=1 if legit_conflict==1 & legit_eco==0 & legit_env==0
+(474 real changes made)
+
+. label var knowledge "Dummy: Knowledge of the geneva refugee convention"
+
+. lab val knowledge know1
+
+. 
+. // Other variables
+. gen age_sq = age*age
+(511 missing values generated)
+
+. 
+. gen never_mess=0
+
+. replace never_mess=1 if mess==0
+(315 real changes made)
+
+. lab var never_mess "Dummy: Never goes to mess"
+
+. 
+. gen diff_friends=0
+
+. replace diff_friends=1 if foreign_friends > 0
+(1,096 real changes made)
+
+. lab var diff_friends "Dummy: Friends from different ethnicity or religion"
+
+. 
+. gen high_interest=0
+
+. replace high_interest=1 if interest==2
+(288 real changes made)
+
+. lab var high_interest "Dummy: Very interested in migration topic"
+
+. gen legit_all = 0
+
+. replace legit_all = 1 if legit_conflict==1 & legit_eco==1 & legit_env==1
+(23 real changes made)
+
+. label var legit_all "1 if respondents think all migrants can apply for asylum"
+
+. 
+. gen center_voter = 0
+
+. replace center_voter = 1 if party==1 | party==2 | party==7
+(235 real changes made)
+
+. label var center_voter "1 if respondent would vote for either SPÖ or ÖVP"
+
+. 
+. gen left_voter = 0
+
+. replace left_voter = 1 if party==5 | party==9 | party==8
+(310 real changes made)
+
+. label var left_voter "1 if participant voted for 'die Grünen'"
+
+. 
+. gen right_voter = 0
+
+. replace right_voter = 1 if party==3 | party==4 | party==6
+(57 real changes made)
+
+. label var right_voter "1 if respondent would vote for the Freedom party of Austria"
+
+. 
+. gen no_voter = 0
+
+. replace no_voter = 1 if party==10
+(84 real changes made)
+
+. label var no_voter "1 if no party preference"
+
+. 
+. gen asylum_abroad = 0
+
+. replace asylum_abroad = 1 if pleas_abroad > 2
+(989 real changes made)
+
+. lab var asylum_abroad "Dummy: Asylum pleas should be made outside the EU"
+
+. 
+. 
+. label define party1 1 "SPÖ" 2 "ÖVP" 3 "FPÖ" 4 "BZÖ" 5 "Die Grünen" 6 "Team Stronach" 7 "NEOs" 8 "KPÖ" 9 "Piratenpartei" 10 "Other", replace
+
+. 
+. *party identifier
+. gen party_affiliation=.
+(1,197 missing values generated)
+
+. replace party_affiliation=1 if left_voter==1
+(310 real changes made)
+
+. replace party_affiliation=2 if center_voter==1
+(235 real changes made)
+
+. replace party_affiliation=3 if right_voter==1
+(57 real changes made)
+
+. replace party_affiliation=4 if no_voter==1
+(84 real changes made)
+
+. label def pa 1 "Left voter" 2 "Center voter" 3 "Right voter" 4 "No voter"
+
+. lab val party_affiliation pa
+
+. 
+. *treatment interactions 
+. gen t2_right = t_2*right_voter
+
+. gen t3_right = t_3*right_voter
+
+. gen t4_right = t_4*right_voter
+
+. gen t2_female = t_2*female
+(511 missing values generated)
+
+. gen t3_female = t_3*female
+(511 missing values generated)
+
+. gen t4_female = t_4*female
+(511 missing values generated)
+
+. 
+. 
+. *more labeling
+. label var female "Female"
+
+. label var age "Age"
+
+. label var religion "Dummy: Religious affiliation"
+
+. label var single "Dummy: Single"
+
+. label var left_voter "Dummy: Left voter"
+
+. label var right_voter "Dummy: Right voter"
+
+. label var center_voter "Dummy: Center voter"
+
+. label var no_voter "Dummy: No party preference"
+
+. 
+. save "$working_ANALYSIS/processed/migration_clean.dta", replace
+(note: file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/processed/migration_clean.dta not foun
+> d)
+file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/processed/migration_clean.dta saved
+
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. ** EOF
+. 
+end of do-file
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. *--------------------------------------------------------------------
+. * SCRIPT: 02_analysis.do
+. * PURPOSE: replicates all tables and figures and saves the results
+. *--------------------------------------------------------------------
+. *--------------------------------------------------
+. * AUTHOR GUIDELINES - Regional Environmental Change:
+. * The figures should be 84 mm, 129 mm, or 174 mm wide and not higher than 234 mm.
+. 
+. /* (1) MAIN MANUSCRIPT
+>         - Figure 1: Acceptance by treatment and polarization
+>         - TABLE 2: Overall determinants of acceptance levels with POL as reference group
+>         - TABLE 3: HETEROGENEOUS TREATMENT EFFECTS
+>         (2) SUPPLEMENTARY MATERIALS
+> */
+. *--------------------------------------------------
+. use "$working_ANALYSIS/processed/migration_clean.dta", replace
+
+. 
+. 
+. 
+. *drop incompletely filled out responses
+. *Figure S1: Response rate,  attrition by treatment
+. catplot incomplete, recast(bar) b1title("") over(treatment) vertical asyvars yla(0(50)300) legend(pos(6) ring(1) row(1)) ytitle("Frequency") yla(,no
+> grid) blabel(bar, pos(outside) size(8pt) format(%4.0f)) xsize(`=8.4/2.54') ysize(`=6/2.54')
+
+. gr save "$working_ANALYSIS/results/intermediate/FigureS1.gph", replace
+(file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/intermediate/FigureS1.gph saved)
+
+. gr export "$working_ANALYSIS/results/figures/FigureS1.tif", replace width(3150)
+(file C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC/results/figures/FigureS1.tif written in TIFF
+>  format)
+
+. kwallis incomplete, by(treatment)
+
+Kruskal-Wallis equality-of-populations rank test
+
+  +------------------------------+
+  |  treatment | Obs |  Rank Sum |
+  |------------+-----+-----------|
+  |   CONFLICT | 202 | 122653.50 |
+  | ENV GLOBAL | 423 | 253629.00 |
+  |  ENV LOCAL | 375 | 220981.50 |
+  |       ECON | 197 | 119739.00 |
+  +------------------------------+
+
+chi-squared =     0.539 with 3 d.f.
+probability =     0.9102
+
+chi-squared with ties =     0.734 with 3 d.f.
+probability =     0.8651
+
+. *drop all observations where the participants did not complete the survey
+. drop if incomplete==1
+(511 observations deleted)
+
+. 
+end of do-file
+
+. do "C:\Users\istei\AppData\Local\Temp\STD1ef4_000000.tmp"
+
+. *-------------------------------------------------------------------------------------------------------
+. * OVERVIEW
+. *-------------------------------------------------------------------------------------------------------
+. *   This script generates tables and figures reported in the manuscript and SOM of the paper:
+. *   "(Climate) Migrants welcome? Evidence from a Survey-Experiment in Austria "
+. *       Author: Ivo Steimanis, Philipps University Marburg
+. *   All experimental data are stored in /data
+. *   All figures reported in the main manuscript and SOM are outputted to /results/figures
+. *   All tables areported in the main manuscript and SOM are outputted to /results/tables
+. * TO PERFORM A CLEAN RUN, DELETE THE FOLLOWING TWO FOLDERS:
+. *   /processed
+. *   /results
+. *-------------------------------------------------------------------------------------------------------
+. 
+. 
+. *--------------------------------------------------
+. * Set global Working Directory
+. *--------------------------------------------------
+. * Define this global macro to point where the replication folder is saved locally that includes this run.do script
+. global working_ANALYSIS "C:\Users\istei\OneDrive\Promotion\1_Projects\Migration survey experiment\Submission\replication_REC"
+
+. 
+. 
+. *--------------------------------------------------
+. * Program Setup
+. *--------------------------------------------------
+. * Initialize log and record system parameters
+. clear
+
+. set more off
+
+. cap mkdir "$working_ANALYSIS/scripts/logs"
+
+. cap log close
